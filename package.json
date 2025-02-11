@@ -1,0 +1,52 @@
+{
+  "name": "vitepress-plugin-diagrams",
+  "version": "0.1.1",
+  "description": "VitePress plugin for generating diagrams from text (PlantUML, Mermaid, etc.)",
+  "author": "Ruslan Makarov <ruslan.makarov@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/altrusl/vitepress-plugin-diagrams.git"
+  },
+  "bugs": {
+    "url": "https://github.com/altrusl/vitepress-plugin-diagrams/issues"
+  },
+  "homepage": "https://github.com/altrusl/vitepress-plugin-diagrams",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "keywords": [
+    "vite",
+    "vitepress-plugin",
+    "diagrams",
+    "plantuml",
+    "mermaid"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "prepare": "pnpm build",
+    "publish": "pnpm publish --access public"
+  },
+  "devDependencies": {
+    "@sxzz/eslint-config": "^4.6.0",
+    "@types/node": "^22.13.1",
+    "eslint": "^9.20.0",
+    "sync-request": "^6.1.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.1.0",
+    "vitepress": "^1.6.3"
+  },
+  "peerDependencies": {
+    "vite": ">= 4.0.0",
+    "vitepress": ">= 1.0.0"
+  }
+}
