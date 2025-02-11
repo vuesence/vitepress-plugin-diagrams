@@ -69,8 +69,19 @@ graph TD
     B -->|Yes| C[OK]
     B -->|No| D[Cancel]
 ```
-<!-- diagram-caption: Flow diagram example -->
+<!-- diagram id="1" caption: "System Design Flow" -->
 ````
+
+## Diagram Metadata
+
+The diagram metadata feature provides additional context and identification. You can add metadata to your diagrams using special HTML comments.
+
+```html
+<!-- diagram id="1" caption: "System Design Flow" -->
+```
+
+- Assign a unique ID to each diagram to prevent cache bloating (optional, if you do not modify and regenerate diagrams)
+- Add descriptive captions under the diagram (optional)
 
 ## Supported Diagrams
 
@@ -92,7 +103,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[diagramId]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -103,6 +114,10 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 You can customize the `CSS` classes to match your theme.
+
+## Note
+
+When updating a diagram, you may see an error on the browser page. This is normal, because the svg file is loaded asynchronously and may not be displayed immediately.
 
 ## License
 

@@ -65,11 +65,22 @@ export default defineConfig({
 ```mermaid
 graph TD
     A[Inicio] --> B{Decisión}
-    B -->|Sí| C[OK]
+    B -->|Sí| C[Aceptar]
     B -->|No| D[Cancelar]
 ```
-<!-- diagram-caption: Ejemplo de diagrama de flujo -->
+<!-- diagram id="1" caption: "Diagrama de flujo del sistema" -->
 ````
+
+## Metadatos de Diagramas
+
+La función de metadatos de diagramas proporciona contexto e identificación adicional. Puede agregar metadatos a sus diagramas utilizando comentarios HTML especiales.
+
+```html
+<!-- diagram id="1" caption: "Diagrama de flujo del sistema" -->
+```
+
+- Asignar un ID único a cada diagrama para prevenir la saturación de caché (opcional, si no modifica y regenera diagramas)
+- Agregar descripciones explicativas debajo del diagrama (opcional)
 
 ## Diagramas Soportados
 
@@ -100,6 +111,10 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Puede personalizar las clases `CSS` para que coincidan con su tema.
+
+## Nota
+
+Cuando actualiza una diagrama, puede ver un error en la página del navegador. Esto es normal, porque el archivo svg se carga de forma asíncrona y puede no mostrarse inmediatamente.
 
 ## Licencia
 

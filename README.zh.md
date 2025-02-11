@@ -59,17 +59,28 @@ export default defineConfig({
 });
 ```
 
-2. 在 markdown 中创建图表：
+2. 在 Markdown 中创建图表:
 
 ````
 ```mermaid
 graph TD
-    A[开始] --> B{决定}
+    A[开始] --> B{决策}
     B -->|是| C[确定]
     B -->|否| D[取消]
 ```
-<!-- diagram-caption: 流程图示例 -->
+<!-- diagram id="1" caption: "系统流程图" -->
 ````
+
+## 图表元数据
+
+图表元数据功能提供额外的上下文和标识。您可以使用特殊的 HTML 注释为图表添加元数据。
+
+```html
+<!-- diagram id="1" caption: "系统流程图" -->
+```
+
+- 为每个图表分配唯一 ID 以防止缓存膨胀（可选，如果不修改和重新生成图表）
+- 在图表下添加描述性说明（可选）
 
 ## 支持的图表类型
 
@@ -100,6 +111,10 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 ```
 
 您可以自定义 `CSS` 类以匹配您的主题。
+
+## 注意
+
+当更新图表时，您可能会在浏览器页面中看到错误。这是正常的，因为 SVG 文件是异步加载的，可能不会立即显示。
 
 ## 许可证
 
