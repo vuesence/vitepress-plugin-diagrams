@@ -7,7 +7,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "./index.ts"),
-      name: "JsonMarkdown",
+      name: "vitepress-plugin-diagrams",
       fileName: "index",
       formats: ["es", "cjs"],
     },
@@ -16,11 +16,10 @@ export default defineConfig({
         'node:fs',
         'node:path',
         'node:events',
+        'node:crypto',
         'node:stream',
         'node:string_decoder',
-        'glob',
-        'json5',
-        'marked'
+        'node:process',
       ]
     },
   },

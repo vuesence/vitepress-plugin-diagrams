@@ -1,7 +1,6 @@
 import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import process from "process";
 import request from "sync-request";
 import type { MarkdownRenderer } from "vitepress";
 
@@ -75,10 +74,13 @@ function diagramToSvg(
       throw new Error(`Unsupported diagram type: ${diagramType}`);
     }
 
+    // Используем глобальный process или резервное значение
+    const baseDir = process?.cwd?.() || process.env.PWD || process.env.INIT_CWD || '.';
+
     // Use default or custom diagrams directory
     const diagramsDir = diagramsPluginOptions.diagramsDir
-      ? path.resolve(process.cwd(), diagramsPluginOptions.diagramsDir)
-      : path.resolve(process.cwd(), "docs/public/diagrams");
+      ? path.resolve(baseDir, diagramsPluginOptions.diagramsDir)
+      : path.resolve(baseDir, "docs/public/diagrams");
 
     // Ensure diagrams directory exists
     fs.mkdirSync(diagramsDir, { recursive: true });
