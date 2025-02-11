@@ -15,11 +15,7 @@ export default defineConfig({
       external: [
         'node:fs',
         'node:path',
-        'node:events',
         'node:crypto',
-        'node:stream',
-        'node:string_decoder',
-        'node:process',
       ]
     },
   },
