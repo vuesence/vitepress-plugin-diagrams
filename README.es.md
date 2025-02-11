@@ -15,6 +15,8 @@ El uso de un servicio externo requiere una conexión a Internet durante la compi
 - Salida HTML limpia y semántica
 - Posibilidad de usar cualquier editor para crear diagramas (por ejemplo, VS Code con extensión Mermaid)
 
+![Diagram](./diag-1.svg)
+
 ## Instalación
 
 ```bash

@@ -4,6 +4,7 @@
 
 A VitePress plugin that adds support for various diagram types using the Kroki service. The plugin automatically converts diagram code blocks into SVG images, caches them locally, and provides a clean, customizable display with optional captions.
 
+
 Using an external service requires an internet connection during build, but it offers significant advantages over creating an image on the client (huge bundle and performance drop) and over creating an image on the server (complexity - mermaid requires puppeteer for this, for example).
 
 ## Features
@@ -14,6 +15,8 @@ Using an external service requires an internet connection during build, but it o
 - Customizable output directory and public path
 - Clean, semantic HTML output
 - Use can use any editor to create diagrams (for example `VS Code` with `Mermaid` extension)
+
+![Diagram](./diag-1.svg)
 
 ## Installation
 

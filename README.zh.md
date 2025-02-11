@@ -15,6 +15,8 @@
 - 清晰的语义化 HTML 输出
 - 可以使用任何编辑器创建图表（例如，使用 Mermaid 扩展的 VS Code）
 
+![Diagram](./diag-1.svg)
+
 ## 安装
 
 ```bash
