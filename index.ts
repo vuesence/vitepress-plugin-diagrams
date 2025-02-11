@@ -1,7 +1,7 @@
 import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
-import process from "node:process";
+import process from "process";
 import request from "sync-request";
 import type { MarkdownRenderer } from "vitepress";
 
