@@ -51,8 +51,6 @@ export default defineConfig({
         'node:perf_hooks',
         'node:async_hooks',
         'node:diagnostics_channel',
-        'node-fetch',
-        'vitepress',
       ]
     },
   },

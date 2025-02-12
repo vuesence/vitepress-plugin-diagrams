@@ -12,6 +12,6 @@
       "strict": true
     },
     "include": [
-      "index1.ts"
+      "index.ts"
     ]
   }
