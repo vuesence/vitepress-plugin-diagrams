@@ -65,11 +65,14 @@ export function diagramToSvg(
     if (shouldGenerateSvg) {
       // Create placeholder SVG while fetching the real one
       const placeholderSvg = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="100%" height="100" xmlns="http://www.w3.org/2000/svg">
+<svg width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
   <!-- vpd-placeholder -->
-  <rect width="100%" height="100%" fill="#f5f5f5"/>
-  <text x="50%" y="50%" font-family="system-ui" font-size="14" fill="#666" text-anchor="middle" dominant-baseline="middle">
-    Generating ${diagramType} diagram... Refresh the page.
+  <rect width="100%" height="120" fill="#f5f5f5"/>
+  <text x="50%" y="45%" font-family="system-ui" font-size="14" fill="#666" text-anchor="middle" dominant-baseline="middle">
+    Generating ${diagramType} diagram...
+  </text>
+  <text x="50%" y="65%" font-family="system-ui" font-size="14" fill="#666" text-anchor="middle" dominant-baseline="middle">
+    Refresh the page.
   </text>
 </svg>`;
 
@@ -94,7 +97,7 @@ export function diagramToSvg(
               filename,
             );
           }
-          fs.writeFileSync(filepath, svg);
+          // fs.writeFileSync(filepath, svg);
           return svg;
         });
     }
