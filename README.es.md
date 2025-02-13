@@ -114,7 +114,7 @@ Puede personalizar las clases `CSS` para que coincidan con su tema.
 
 ## Nota
 
-Cuando actualiza una diagrama, puede ver un error en la página del navegador. Esto es normal, porque el archivo svg se carga de forma asíncrona y puede no mostrarse inmediatamente.
+Cuando actualiza una diagrama, puede ver un placeholder imagen en la página del navegador. Esto es normal, porque el archivo svg se carga de forma asíncrona y puede no mostrarse inmediatamente. Simplemente actualice la página.
 
 ## Licencia
 

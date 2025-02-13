@@ -117,7 +117,7 @@ You can customize the `CSS` classes to match your theme.
 
 ## Note
 
-When updating a diagram, you may see an error on the browser page. This is normal, because the svg file is loaded asynchronously and may not be displayed immediately.
+When updating a diagram, you may see a placeholder image on the browser page. This is normal, because the svg file is loaded asynchronously and may not be displayed immediately. Just refresh the page.
 
 ## License
 

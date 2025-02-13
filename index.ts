@@ -69,7 +69,7 @@ export function diagramToSvg(
   <!-- vpd-placeholder -->
   <rect width="100%" height="100%" fill="#f5f5f5"/>
   <text x="50%" y="50%" font-family="system-ui" font-size="14" fill="#666" text-anchor="middle" dominant-baseline="middle">
-    Generating ${diagramType} diagram...
+    Generating ${diagramType} diagram... Refresh the page.
   </text>
 </svg>`;
 
@@ -101,10 +101,11 @@ export function diagramToSvg(
 
     const publicPath = diagramsPluginOptions.publicPath ?? "/diagrams";
 
+    // src="${publicPath}/${filename}"
     // Return diagram with optional caption
     return `<figure class="vpd-diagram vpd-diagram--${diagramType}">
         <img 
-          src="${publicPath}/${filename}" 
+          :src="\`${publicPath}/${filename}\`" 
           alt="${diagramType} Diagram" 
           class="vpd-diagram-image" 
         />

@@ -114,7 +114,7 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 
 ## 注意
 
-当更新图表时，您可能会在浏览器页面中看到错误。这是正常的，因为 SVG 文件是异步加载的，可能不会立即显示。
+当更新图表时，您可能会在浏览器页面中看到 placeholder 图像。这是正常的，因为 SVG 文件是异步加载的，可能不会立即显示。只需刷新页面。
 
 ## 许可证
 
