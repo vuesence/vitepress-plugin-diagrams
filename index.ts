@@ -52,8 +52,29 @@ export function diagramToSvg(
     );
     const filepath = path.join(diagramsDir, filename);
 
-    // Check if file already exists and has the same content
-    if (!fs.existsSync(filepath)) {
+    // Check if file exists and is not a placeholder
+    const fileExists = fs.existsSync(filepath);
+
+    let isPlaceholderSvg = false;
+    if (fileExists) {
+      const svgContent = fs.readFileSync(filepath, "utf-8");
+      isPlaceholderSvg = svgContent.includes("<!-- vpd-placeholder -->");
+    }
+    const shouldGenerateSvg = !fileExists || isPlaceholderSvg;
+
+    if (shouldGenerateSvg) {
+      // Create placeholder SVG while fetching the real one
+      const placeholderSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100%" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- vpd-placeholder -->
+  <rect width="100%" height="100%" fill="#f5f5f5"/>
+  <text x="50%" y="50%" font-family="system-ui" font-size="14" fill="#666" text-anchor="middle" dominant-baseline="middle">
+    Generating ${diagramType} diagram...
+  </text>
+</svg>`;
+
+      fs.writeFileSync(filepath, placeholderSvg);
+
       fetch(`https://kroki.io/${diagramType}`, {
         method: "POST",
         headers: {
@@ -70,6 +91,7 @@ export function diagramToSvg(
               diagramsDir,
               diagramType as DiagramType,
               diagramId,
+              filename,
             );
           }
           fs.writeFileSync(filepath, svg);
@@ -77,7 +99,7 @@ export function diagramToSvg(
         });
     }
 
-    const publicPath = diagramsPluginOptions.publicPath ?? "diagrams";
+    const publicPath = diagramsPluginOptions.publicPath ?? "/diagrams";
 
     // Return diagram with optional caption
     return `<figure class="vpd-diagram vpd-diagram--${diagramType}">

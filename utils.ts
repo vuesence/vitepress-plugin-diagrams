@@ -17,16 +17,15 @@ export function extractDiagramMetadata(
 ): DiagramMetadata {
   const nextToken = tokens[idx + 1];
   if (nextToken && nextToken.type === "html_block") {
-    const metaMatch = nextToken.content.match(
-      /<!--\s*diagram\s+id="([^"]+)"\s*caption:\s*"([^"]+)"\s*-->/,
+    // Match optional id and caption
+    const idMatch = nextToken.content.match(
+      /<!--\s*diagram(?:\s+id="([^"]+)")?/,
     );
-
-    if (metaMatch) {
-      return {
-        id: metaMatch[1].trim(),
-        caption: metaMatch[2].trim(),
-      };
-    }
+    const captionMatch = nextToken.content.match(/\s+caption="([^"]+)"/);
+    return {
+      id: idMatch?.[1]?.trim(),
+      caption: captionMatch?.[1]?.trim() || "",
+    };
   }
   return { caption: "", id: undefined };
 }
@@ -76,6 +75,7 @@ export function removeOldDiagramFiles(
   diagramsDir: string,
   diagramType: DiagramType,
   diagramId: string,
+  filename: string,
 ): void {
   if (!diagramId) {
     return;
@@ -83,7 +83,10 @@ export function removeOldDiagramFiles(
 
   const oldFiles = fs
     .readdirSync(diagramsDir)
-    .filter((file) => file.startsWith(`${diagramType}-${diagramId}-`));
+    .filter(
+      (file) =>
+        file.startsWith(`${diagramType}-${diagramId}-`) && file !== filename,
+    );
 
   oldFiles.forEach((oldFile) => {
     fs.unlinkSync(path.join(diagramsDir, oldFile));
