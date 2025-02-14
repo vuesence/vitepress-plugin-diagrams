@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [],
   build: {
     lib: {
-      entry: resolve(__dirname, "./index.ts"),
+      entry: resolve(__dirname, "./src/index.ts"),
       name: "vitepress-plugin-diagrams",
       fileName: "index",
       formats: ["es", "cjs"],
