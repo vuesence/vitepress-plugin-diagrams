@@ -97,7 +97,7 @@ export function diagramToSvg(
               filename,
             );
           }
-          // fs.writeFileSync(filepath, svg);
+          fs.writeFileSync(filepath, svg);
           return svg;
         });
     }
