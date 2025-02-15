@@ -50,6 +50,8 @@ export function diagramToSvg(
       normalizedDiagram,
       diagramId,
     );
+    // console.log("filename", filename);
+
     const filepath = path.join(diagramsDir, filename);
 
     // Check if file exists and is not a placeholder
@@ -106,7 +108,21 @@ export function diagramToSvg(
 
     // src="${publicPath}/${filename}"
     // Return diagram with optional caption
-    return `<figure class="vpd-diagram vpd-diagram--${diagramType}">
+    return `<figure 
+      class="vpd-diagram vpd-diagram--${diagramType}" 
+      onclick="
+        const figure = this;
+        const isFullscreen = figure.classList.contains('vpd-diagram--fullscreen');
+        
+        document.querySelectorAll('.vpd-diagram').forEach(diagram => {
+          diagram.classList.remove('vpd-diagram--fullscreen');
+        });
+
+        if (!isFullscreen) {
+          figure.classList.add('vpd-diagram--fullscreen');
+        }
+      "
+    >
         <img 
           :src="\`${publicPath}/${filename}\`" 
           alt="${diagramType} Diagram" 
