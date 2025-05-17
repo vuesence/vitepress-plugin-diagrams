@@ -7,6 +7,12 @@ A VitePress plugin that adds support for various diagram types using the Kroki s
 
 Using an external service requires an internet connection during build, but it offers significant advantages over creating an image on the client (huge bundle and performance drop) and over creating an image on the server (complexity - mermaid requires puppeteer for this, for example).
 
+The diagrams are meant to be generated at DEV time because:
+
+1. The generation process is asynchronous.
+2. It’s not 100% reliable (e.g., kroki.io service might be down).
+3. The user needs to verify the output.
+
 ## Features
 
 - Supports multiple diagram types (Mermaid, PlantUML, GraphViz, and more)
