@@ -1,0 +1,14 @@
+- id: clean-diagrams
+  name: clean unused diagrams
+  description: This hook cleans unused diagrams
+  entry: cli clean
+  pass_filenames: false
+  always_run: true
+  language: node
+- id: check-missing-diagrams
+  name: check missing diagrams
+  description: This hook checks if diagrams are missing from the docs
+  entry: cli check-missing
+  pass_filenames: false
+  always_run: true
+  language: node
