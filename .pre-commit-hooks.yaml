@@ -1,7 +1,7 @@
 - id: clean-diagrams
   name: clean unused diagrams
   description: This hook cleans unused diagrams
-  entry: cli clean
+  entry: cli clean --delete
   pass_filenames: false
   always_run: true
   language: node
