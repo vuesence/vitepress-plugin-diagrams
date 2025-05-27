@@ -1,26 +1,20 @@
 import * as fs from "node:fs";
-import { resolveDiagramBaseDir, generateUniqueFilename, getMarkdownFilesFromDir, extractDiagramsFromMarkdown } from "./utils";
+import { resolveDiagramBaseDir, getAllDiagramsHashes } from "./utils";
 
 export function checkMissing(options: { docs?: string }) {
-  const docsRoot = options.docs || 'docs';
   const diagramsDir = resolveDiagramBaseDir();
 
   if (!fs.existsSync(diagramsDir)) {
-    console.error('No diagrams directory found:', diagramsDir);
-    return;
+    throw new Error(`No diagrams directory found: ${diagramsDir}`);
   }
 
-  const diagramFiles = new Set(fs.readdirSync(diagramsDir).filter(f => f.endsWith('.svg')));
+  const realDiagrams = new Set(fs.readdirSync(diagramsDir).filter(f => f.endsWith('.svg')));
+  const desiredDiagrams = getAllDiagramsHashes(options.docs);
   const missing: string[] = [];
 
-  const mdFiles = getMarkdownFilesFromDir(docsRoot);
-  for (const mdFile of mdFiles) {
-    const md = fs.readFileSync(mdFile, 'utf-8');
-    for (const { type, content, id } of extractDiagramsFromMarkdown(md)) {
-      const filename = generateUniqueFilename(type as any, content, id);
-      if (!diagramFiles.has(filename)) {
-        missing.push(`${filename} (from ${mdFile})`);
-      }
+  for (const hash of desiredDiagrams) {
+    if (!realDiagrams.has(hash)) {
+      missing.push(hash);
     }
   }
 
@@ -33,5 +27,5 @@ export function checkMissing(options: { docs?: string }) {
   for (const m of missing) {
     console.log('  ' + m);
   }
-  process.exit(1)
+  process.exit(1);
 }

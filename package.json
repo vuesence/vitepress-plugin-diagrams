@@ -39,12 +39,13 @@
   "devDependencies": {
     "@sxzz/eslint-config": "^4.6.0",
     "@types/node": "^22.13.1",
+    "commander": "^14.0.0",
     "esbuild": "^0.25.5",
     "eslint": "^9.20.0",
+    "markdown-it": "^14.1.0",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
-    "vitepress": "^1.6.3",
-    "commander": "^14.0.0"
+    "vitepress": "^1.6.3"
   },
   "peerDependencies": {
     "vite": ">= 4.0.0",
@@ -52,5 +53,6 @@
   },
   "bin": {
     "cli": "bin/cli.cjs"
-  }
+  },
+  "packageManager": "pnpm@10.6.4+sha512.da3d715bfd22a9a105e6e8088cfc7826699332ded60c423b14ec613a185f1602206702ff0fe4c438cb15c979081ce4cb02568e364b15174503a63c7a8e2a5f6c"
 }

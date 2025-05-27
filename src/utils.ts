@@ -5,6 +5,7 @@ import * as process from "node:process";
 import { SUPPORTED_DIAGRAM_TYPES } from './constants';
 import type { DiagramType } from "./constants";
 import type { DiagramMetadata } from "./types";
+import MarkdownIt from 'markdown-it';
 
 /**
  * Extract diagram metadata from markdown tokens
@@ -94,12 +95,17 @@ export function removeOldDiagramFiles(
   });
 }
 
-// Helper to recursively find all markdown files under a directory
-export function getMarkdownFilesFromDir(dir: string): string[] {
+/**
+ * Helper to recursively find all markdown files under a directory
+ * @param docsDir Directory to search documentation markdown
+ * @returns Array of markdown file paths
+ */
+export function getMarkdownFilesFromDir(docsDir: string): string[] {
   let results: string[] = [];
-  const list = fs.readdirSync(dir);
+  const list = fs.readdirSync(docsDir);
   for (const file of list) {
-    const filePath = path.join(dir, file);
+    if (file === 'node_modules') continue;
+    const filePath = path.join(docsDir, file);
     const stat = fs.statSync(filePath);
     if (stat && stat.isDirectory()) {
       results = results.concat(getMarkdownFilesFromDir(filePath));
@@ -110,20 +116,42 @@ export function getMarkdownFilesFromDir(dir: string): string[] {
   return results;
 }
 
-// Extract all diagram code blocks from markdown
-export function extractDiagramsFromMarkdown(md: string): Array<{type: string, content: string, id?: string}> {
-  const blocks: Array<{type: string, content: string, id?: string}> = [];
-  // Regex for code blocks: ```diagramType [id=...]\n...code...\n```
-  const codeBlockRegex = /```(\w+)([^\n]*)\n([\s\S]*?)```/g;
-  let match;
-  while ((match = codeBlockRegex.exec(md))) {
-    const type = match[1].toLowerCase();
-    if (!SUPPORTED_DIAGRAM_TYPES.includes(type as any)) continue;
-    const meta = match[2];
-    const content = match[3].replace(/\r\n/g, '\n');
-    // Try to extract id from meta (e.g., id=foo)
-    const idMatch = /id=([\w-]+)/.exec(meta);
-    blocks.push({ type, content, id: idMatch ? idMatch[1] : undefined });
+/**
+ * Extract all diagram metadata from markdown
+ * @param filepath Markdown filepath
+ * @returns Array of diagram blocks with type, content, and optional id
+ */
+export function extractDiagramsMetadataFromMarkdown(filepath: string): Array<{type: string, content: string, id?: string, caption?: string}> {
+  const diagrams: Array<{ type: string, content: string, id?: string, caption?: string }> = [];
+  const markdownString = fs.readFileSync(filepath, 'utf-8');
+  const md = new MarkdownIt();
+  const tokens = md.parse(markdownString, {});
+  tokens.forEach((token, idx) => {
+    if (token.type === 'fence' && SUPPORTED_DIAGRAM_TYPES.includes(token.info.trim())) {
+      const type = token.info.trim();
+      const content = token.content.trim();
+      const { caption, id } = extractDiagramMetadata(tokens, idx);
+      diagrams.push({ type, content, id, caption });
+    }
+  });
+  return diagrams;
+}
+
+/**
+ * Get all unique diagram hashes (filenames) from markdown files in the docs root
+ * @param docsRoot Root directory containing markdown files
+ * @returns Set of unique diagram filenames (hashes)
+ */
+export function getAllDiagramsHashes(docsRoot?: string): Set<string> {
+  const dir: string = docsRoot || 'docs';
+  const hashes = new Set<string>();
+
+  const mdFiles = getMarkdownFilesFromDir(dir);
+  for (const mdFile of mdFiles) {
+    for (const { type, content, id, caption } of extractDiagramsMetadataFromMarkdown(mdFile)) {
+      const filename = generateUniqueFilename(type as any, content, id);
+      hashes.add(filename);
+    }
   }
-  return blocks;
+  return hashes;
 }

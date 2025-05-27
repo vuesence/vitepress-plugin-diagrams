@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { resolveDiagramBaseDir, generateUniqueFilename, getMarkdownFilesFromDir, extractDiagramsFromMarkdown } from "./utils";
+import { resolveDiagramBaseDir, generateUniqueFilename, getMarkdownFilesFromDir, extractDiagramsMetadataFromMarkdown, getAllDiagramsHashes } from "./utils";
 
 export function clean(options: { delete?: boolean; docs?: string }) {
   const shouldDelete = options.delete ?? false;
@@ -8,20 +8,10 @@ export function clean(options: { delete?: boolean; docs?: string }) {
   const diagramsDir = resolveDiagramBaseDir();
 
   if (!fs.existsSync(diagramsDir)) {
-    console.log('No diagrams directory found:', diagramsDir);
-    return;
+    throw new Error(`No diagrams directory found: ${diagramsDir}`);
   }
 
-  const referenced = new Set<string>();
-  const mdFiles = getMarkdownFilesFromDir(docsRoot);
-  for (const mdFile of mdFiles) {
-    const md = fs.readFileSync(mdFile, 'utf-8');
-    for (const { type, content, id } of extractDiagramsFromMarkdown(md)) {
-      const filename = generateUniqueFilename(type as any, content, id);
-      referenced.add(filename);
-    }
-  }
-
+  const referenced = getAllDiagramsHashes(options.docs)
   const allSvgs = fs.readdirSync(diagramsDir).filter(f => f.endsWith('.svg'));
   const unused = allSvgs.filter(f => !referenced.has(f));
 
