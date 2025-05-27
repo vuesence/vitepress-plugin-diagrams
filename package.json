@@ -33,19 +33,24 @@
   ],
   "scripts": {
     "build": "vite build",
-    "prepare": "pnpm build",
+    "build:cli": "node scripts/build-cli.mjs",
     "publish": "pnpm publish --access public"
   },
   "devDependencies": {
     "@sxzz/eslint-config": "^4.6.0",
     "@types/node": "^22.13.1",
+    "esbuild": "^0.25.5",
     "eslint": "^9.20.0",
     "typescript": "^5.7.3",
     "vite": "^6.1.0",
-    "vitepress": "^1.6.3"
+    "vitepress": "^1.6.3",
+    "commander": "^14.0.0"
   },
   "peerDependencies": {
     "vite": ">= 4.0.0",
     "vitepress": ">= 1.0.0"
+  },
+  "bin": {
+    "cli": "bin/cli.cjs"
   }
 }
