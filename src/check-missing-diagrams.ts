@@ -33,4 +33,5 @@ export function checkMissing(options: { docs?: string }) {
   for (const m of missing) {
     console.log('  ' + m);
   }
+  process.exit(1)
 }

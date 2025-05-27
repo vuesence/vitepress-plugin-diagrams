@@ -42,4 +42,5 @@ export function clean(options: { delete?: boolean; docs?: string }) {
   if (!shouldDelete) {
     console.log('\nRun with --delete to remove these files.');
   }
+  process.exit(1)
 }
