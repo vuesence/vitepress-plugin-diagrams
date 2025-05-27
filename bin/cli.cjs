@@ -1189,7 +1189,7 @@ var require_command = __commonJS({
     var childProcess = require("node:child_process");
     var path3 = require("node:path");
     var fs4 = require("node:fs");
-    var process2 = require("node:process");
+    var process3 = require("node:process");
     var { Argument: Argument2, humanReadableArgName } = require_argument();
     var { CommanderError: CommanderError2 } = require_error();
     var { Help: Help2, stripColor } = require_help();
@@ -1236,13 +1236,13 @@ var require_command = __commonJS({
         this._showSuggestionAfterError = true;
         this._savedState = null;
         this._outputConfiguration = {
-          writeOut: (str) => process2.stdout.write(str),
-          writeErr: (str) => process2.stderr.write(str),
+          writeOut: (str) => process3.stdout.write(str),
+          writeErr: (str) => process3.stderr.write(str),
           outputError: (str, write) => write(str),
-          getOutHelpWidth: () => process2.stdout.isTTY ? process2.stdout.columns : void 0,
-          getErrHelpWidth: () => process2.stderr.isTTY ? process2.stderr.columns : void 0,
-          getOutHasColors: () => useColor() ?? (process2.stdout.isTTY && process2.stdout.hasColors?.()),
-          getErrHasColors: () => useColor() ?? (process2.stderr.isTTY && process2.stderr.hasColors?.()),
+          getOutHelpWidth: () => process3.stdout.isTTY ? process3.stdout.columns : void 0,
+          getErrHelpWidth: () => process3.stderr.isTTY ? process3.stderr.columns : void 0,
+          getOutHasColors: () => useColor() ?? (process3.stdout.isTTY && process3.stdout.hasColors?.()),
+          getErrHasColors: () => useColor() ?? (process3.stderr.isTTY && process3.stderr.hasColors?.()),
           stripColor: (str) => stripColor(str)
         };
         this._hidden = false;
@@ -1637,7 +1637,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
         if (this._exitCallback) {
           this._exitCallback(new CommanderError2(exitCode, code, message));
         }
-        process2.exit(exitCode);
+        process3.exit(exitCode);
       }
       /**
        * Register callback `fn` for the command.
@@ -2037,16 +2037,16 @@ Expecting one of '${allowedValues.join("', '")}'`);
         }
         parseOptions = parseOptions || {};
         if (argv === void 0 && parseOptions.from === void 0) {
-          if (process2.versions?.electron) {
+          if (process3.versions?.electron) {
             parseOptions.from = "electron";
           }
-          const execArgv = process2.execArgv ?? [];
+          const execArgv = process3.execArgv ?? [];
           if (execArgv.includes("-e") || execArgv.includes("--eval") || execArgv.includes("-p") || execArgv.includes("--print")) {
             parseOptions.from = "eval";
           }
         }
         if (argv === void 0) {
-          argv = process2.argv;
+          argv = process3.argv;
         }
         this.rawArgs = argv.slice();
         let userArgs;
@@ -2057,7 +2057,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
             userArgs = argv.slice(2);
             break;
           case "electron":
-            if (process2.defaultApp) {
+            if (process3.defaultApp) {
               this._scriptPath = argv[1];
               userArgs = argv.slice(2);
             } else {
@@ -2244,11 +2244,11 @@ Expecting one of '${allowedValues.join("', '")}'`);
         }
         launchWithNode = sourceExt.includes(path3.extname(executableFile));
         let proc;
-        if (process2.platform !== "win32") {
+        if (process3.platform !== "win32") {
           if (launchWithNode) {
             args.unshift(executableFile);
-            args = incrementNodeInspectorPort(process2.execArgv).concat(args);
-            proc = childProcess.spawn(process2.argv[0], args, { stdio: "inherit" });
+            args = incrementNodeInspectorPort(process3.execArgv).concat(args);
+            proc = childProcess.spawn(process3.argv[0], args, { stdio: "inherit" });
           } else {
             proc = childProcess.spawn(executableFile, args, { stdio: "inherit" });
           }
@@ -2259,13 +2259,13 @@ Expecting one of '${allowedValues.join("', '")}'`);
             subcommand._name
           );
           args.unshift(executableFile);
-          args = incrementNodeInspectorPort(process2.execArgv).concat(args);
-          proc = childProcess.spawn(process2.execPath, args, { stdio: "inherit" });
+          args = incrementNodeInspectorPort(process3.execArgv).concat(args);
+          proc = childProcess.spawn(process3.execPath, args, { stdio: "inherit" });
         }
         if (!proc.killed) {
           const signals = ["SIGUSR1", "SIGUSR2", "SIGTERM", "SIGINT", "SIGHUP"];
           signals.forEach((signal) => {
-            process2.on(signal, () => {
+            process3.on(signal, () => {
               if (proc.killed === false && proc.exitCode === null) {
                 proc.kill(signal);
               }
@@ -2276,7 +2276,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
         proc.on("close", (code) => {
           code = code ?? 1;
           if (!exitCallback) {
-            process2.exit(code);
+            process3.exit(code);
           } else {
             exitCallback(
               new CommanderError2(
@@ -2298,7 +2298,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
             throw new Error(`'${executableFile}' not executable`);
           }
           if (!exitCallback) {
-            process2.exit(1);
+            process3.exit(1);
           } else {
             const wrappedError = new CommanderError2(
               1,
@@ -2799,13 +2799,13 @@ Expecting one of '${allowedValues.join("', '")}'`);
        */
       _parseOptionsEnv() {
         this.options.forEach((option) => {
-          if (option.envVar && option.envVar in process2.env) {
+          if (option.envVar && option.envVar in process3.env) {
             const optionKey = option.attributeName();
             if (this.getOptionValue(optionKey) === void 0 || ["default", "config", "env"].includes(
               this.getOptionValueSource(optionKey)
             )) {
               if (option.required || option.optional) {
-                this.emit(`optionEnv:${option.name()}`, process2.env[option.envVar]);
+                this.emit(`optionEnv:${option.name()}`, process3.env[option.envVar]);
               } else {
                 this.emit(`optionEnv:${option.name()}`);
               }
@@ -3329,7 +3329,7 @@ Expecting one of '${allowedValues.join("', '")}'`);
        */
       help(contextOptions) {
         this.outputHelp(contextOptions);
-        let exitCode = Number(process2.exitCode ?? 0);
+        let exitCode = Number(process3.exitCode ?? 0);
         if (exitCode === 0 && contextOptions && typeof contextOptions !== "function" && contextOptions.error) {
           exitCode = 1;
         }
@@ -3419,9 +3419,9 @@ Expecting one of '${allowedValues.join("', '")}'`);
       });
     }
     function useColor() {
-      if (process2.env.NO_COLOR || process2.env.FORCE_COLOR === "0" || process2.env.FORCE_COLOR === "false")
+      if (process3.env.NO_COLOR || process3.env.FORCE_COLOR === "0" || process3.env.FORCE_COLOR === "false")
         return false;
-      if (process2.env.FORCE_COLOR || process2.env.CLICOLOR_FORCE !== void 0)
+      if (process3.env.FORCE_COLOR || process3.env.CLICOLOR_FORCE !== void 0)
         return true;
       return void 0;
     }
@@ -3477,7 +3477,7 @@ var path2 = __toESM(require("node:path"), 1);
 var crypto = __toESM(require("node:crypto"), 1);
 var fs = __toESM(require("node:fs"), 1);
 var path = __toESM(require("node:path"), 1);
-var process = __toESM(require("node:process"), 1);
+var process2 = __toESM(require("node:process"), 1);
 
 // src/constants.ts
 var SUPPORTED_DIAGRAM_TYPES = [
@@ -3517,7 +3517,7 @@ function generateUniqueFilename(diagramType, diagramContent, diagramId) {
   return diagramId ? `${diagramType}-${diagramId}-${hash}.svg` : `${diagramType}-${hash}.svg`;
 }
 function resolveDiagramBaseDir(customDir) {
-  const baseDir = process?.cwd?.() || process.env.PWD || process.env.INIT_CWD || ".";
+  const baseDir = process2?.cwd?.() || process2.env.PWD || process2.env.INIT_CWD || ".";
   return customDir ? path.resolve(baseDir, customDir) : path.resolve(baseDir, "docs/public/diagrams");
 }
 function getMarkdownFilesFromDir(dir) {
@@ -3584,6 +3584,7 @@ function clean(options) {
   if (!shouldDelete) {
     console.log("\nRun with --delete to remove these files.");
   }
+  process.exit(1);
 }
 
 // src/check-missing-diagrams.ts
@@ -3615,6 +3616,7 @@ function checkMissing(options) {
   for (const m of missing) {
     console.log("  " + m);
   }
+  process.exit(1);
 }
 
 // src/cli.ts
