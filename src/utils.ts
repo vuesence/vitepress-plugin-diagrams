@@ -2,9 +2,9 @@ import * as crypto from "node:crypto";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import * as process from "node:process";
-import { SUPPORTED_DIAGRAM_TYPES } from './constants';
-import type { DiagramType } from "./constants";
-import type { DiagramMetadata } from "./types";
+import { SUPPORTED_DIAGRAM_TYPES } from './constants.js';
+import type { DiagramType } from "./constants.js";
+import type { DiagramMetadata } from "./types.js";
 import MarkdownIt from 'markdown-it';
 
 /**
@@ -127,7 +127,7 @@ export function extractDiagramsMetadataFromMarkdown(filepath: string): Array<{ty
   const md = new MarkdownIt();
   const tokens = md.parse(markdownString, {});
   tokens.forEach((token, idx) => {
-    if (token.type === 'fence' && SUPPORTED_DIAGRAM_TYPES.includes(token.info.trim())) {
+    if (token.type === 'fence' && SUPPORTED_DIAGRAM_TYPES.includes(token.info.trim() as any)) {
       const type = token.info.trim();
       const content = token.content.trim();
       const { caption, id } = extractDiagramMetadata(tokens, idx);

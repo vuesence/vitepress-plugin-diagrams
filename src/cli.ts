@@ -1,6 +1,6 @@
 import { Command } from 'commander';
-import { clean } from './clean-diagrams';
-import { checkMissing } from './check-missing-diagrams';
+import { clean } from './clean-diagrams.js';
+import { checkMissing } from './check-missing-diagrams.js';
 
 const program = new Command();
 

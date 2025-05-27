@@ -1,5 +1,5 @@
 import * as fs from "node:fs";
-import { resolveDiagramBaseDir, getAllDiagramsHashes } from "./utils";
+import { resolveDiagramBaseDir, getAllDiagramsHashes } from "./utils.js";
 
 export function checkMissing(options: { docs?: string }) {
   const diagramsDir = resolveDiagramBaseDir();

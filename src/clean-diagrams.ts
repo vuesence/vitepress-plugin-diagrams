@@ -1,6 +1,6 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { resolveDiagramBaseDir, generateUniqueFilename, getMarkdownFilesFromDir, extractDiagramsMetadataFromMarkdown, getAllDiagramsHashes } from "./utils";
+import { resolveDiagramBaseDir, getAllDiagramsHashes } from "./utils.js";
 
 export function clean(options: { delete?: boolean; docs?: string }) {
   const shouldDelete = options.delete ?? false;

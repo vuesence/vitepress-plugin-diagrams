@@ -29,6 +29,9 @@ importers:
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
+      undici-types:
+        specifier: ^7.10.0
+        version: 7.10.0
       vite:
         specifier: ^6.1.0
         version: 6.1.0(@types/node@22.13.1)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)
@@ -2348,6 +2351,9 @@ packages:
 
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
+  undici-types@7.10.0:
+    resolution: {integrity: sha512-t5Fy/nfn+14LuOc2KNYg75vZqClpAiqscVvMygNnlsHBFpSXdJaYtXMcdNLpl/Qvc3P2cB3s6lOV51nqsFq4ag==}
 
   unist-util-is@6.0.0:
     resolution: {integrity: sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==}
@@ -4946,6 +4952,8 @@ snapshots:
       - supports-color
 
   undici-types@6.20.0: {}
+
+  undici-types@7.10.0: {}
 
   unist-util-is@6.0.0:
     dependencies:
