@@ -6,6 +6,12 @@ Un plugin de VitePress que agrega soporte para varios tipos de diagramas utiliza
 
 El uso de un servicio externo requiere una conexión a Internet durante la compilación, pero ofrece ventajas significativas sobre la creación de imágenes en el cliente (gran tamaño del paquete y caída del rendimiento) y sobre la creación de imágenes en el servidor (complejidad - mermaid requiere puppeteer para esto, por ejemplo).
 
+Los diagramas están diseñados para ser generados en el tiempo __DEV__ debido a:
+
+1. El proceso de generación es asíncrono.
+2. No es 100% confiable (por ejemplo, el servicio kroki.io podría estar caído).
+3. El usuario necesita verificar la salida.
+
 ## Características
 
 - Soporta múltiples tipos de diagramas (Mermaid, PlantUML, GraphViz y más)

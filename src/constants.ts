@@ -10,7 +10,7 @@ export const SUPPORTED_DIAGRAM_TYPES = [
   "nwdiag",
   "packetdiag",
   "rackdiag",
-  "c4",
+  "c4plantuml",
   "d2",
   "dbml",
   "ditaa",
