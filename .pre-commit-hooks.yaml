@@ -5,7 +5,6 @@
   files: ^docs/
   types: [svg, markdown]
   pass_filenames: false
-  always_run: true
   language: node
 - id: check-missing-diagrams
   name: check missing diagrams
@@ -14,5 +13,4 @@
   files: ^docs/
   types: [svg, markdown]
   pass_filenames: false
-  always_run: true
   language: node
