@@ -3,7 +3,7 @@
   description: This hook cleans unused diagrams
   entry: vitepress-plugin-diagrams clean --delete
   files: ^docs/
-  types: [svg, markdown]
+  types_or: [svg, markdown]
   pass_filenames: false
   language: node
 - id: check-missing-diagrams
@@ -11,6 +11,6 @@
   description: This hook checks if diagrams are missing from the docs
   entry: vitepress-plugin-diagrams check-missing
   files: ^docs/
-  types: [svg, markdown]
+  types_or: [svg, markdown]
   pass_filenames: false
   language: node
