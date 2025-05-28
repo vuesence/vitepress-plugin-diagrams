@@ -12,6 +12,8 @@
 2. 它不是100%可靠的（例如，kroki.io服务可能会宕机）。
 3. 用户需要验证输出。
 
+> `vitepress-plugin-diagrams` CLI 可以在 CI 中使用，以檢查是否有遺漏的圖表或過時的圖表。還有一個 [pre-commit](https://pre-commit.com) 鉤子可用 (請參閱 [預提交部分](#預提交部分)) 。
+
 ## 功能特点
 
 - 支持多种图表类型（Mermaid、PlantUML、GraphViz 等）
@@ -96,10 +98,10 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 
 ## 配置选项
 
-| 选项 | 类型 | 默认值 | 描述 |
-|--------|------|---------|-------------|
-| `diagramsDir` | `string` | `"docs/public/diagrams"` | SVG 文件存储目录 |
-| `publicPath` | `string` | `"/diagrams"` | 文件访问的公共路径 |
+| 选项          | 类型     | 默认值                   | 描述               |
+|---------------|----------|--------------------------|------------------|
+| `diagramsDir` | `string` | `"docs/public/diagrams"` | SVG 文件存储目录   |
+| `publicPath`  | `string` | `"/diagrams"`            | 文件访问的公共路径 |
 
 ## 输出结构
 
@@ -117,6 +119,18 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 ```
 
 您可以自定义 `CSS` 类以匹配您的主题。
+
+## 預提交部分
+
+將此新增至您的 `.pre-commit-config.yaml`：
+
+```yaml
+- repo: https://github.com/vuesence/vitepress-plugin-diagrams
+  rev: "main"
+  hooks:
+    - id: check-missing-diagrams
+    - id: clean-diagrams
+```
 
 ## 注意
 
