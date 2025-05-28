@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { clean } from './clean-diagrams.js';
 import { checkMissing } from './check-missing-diagrams.js';
