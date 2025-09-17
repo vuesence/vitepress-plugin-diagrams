@@ -13,6 +13,12 @@ export interface DiagramPluginOptions {
    * @default "diagrams"
    */
   publicPath?: string;
+
+  /**
+   * Custom Kroki server URL for diagram generation
+   * @default "https://kroki.io"
+   */
+  krokiServerUrl?: string;
 }
 
 /**

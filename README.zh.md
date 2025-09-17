@@ -59,6 +59,7 @@ export default defineConfig({
       configureDiagramsPlugin(md, {
         diagramsDir: "docs/public/diagrams", // 可选：自定义 SVG 文件目录
         publicPath: "/diagrams", // 可选：自定义公共路径
+        krokiServerUrl: "https://kroki.io", // 可选：自定义 Kroki 服务器地址
       });
     },
   },
@@ -100,6 +101,7 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 |--------|------|---------|-------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | SVG 文件存储目录 |
 | `publicPath` | `string` | `"/diagrams"` | 文件访问的公共路径 |
+| `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki 服务器地址 |
 
 ## 输出结构
 
