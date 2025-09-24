@@ -61,6 +61,7 @@ export default defineConfig({
       configureDiagramsPlugin(md, {
         diagramsDir: "docs/public/diagrams", // Опціонально: користувацька директорія для SVG файлів
         publicPath: "/diagrams", // Опціонально: користувацький публічний шлях для зображень
+        krokiServerUrl: "https://kroki.io", // Опціонально: URL сервера Kroki
       });
     },
   },
@@ -101,7 +102,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | Опція         | Тип      | За замовчуванням         | Опис                                 |
 |---------------|----------|--------------------------|--------------------------------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Директорія для зберігання SVG файлів |
-| `publicPath`  | `string` | `"/diagrams"`            | Публічний шлях для доступу до файлів |
+| `publicPath` | `string` | `"/diagrams"` | Публічний шлях для доступу до файлів |
+| `krokiServerUrl` | `string` | `"https://kroki.io"` | URL сервера Kroki для генерації діаграм |
 
 ## Структура виводу
 

@@ -62,6 +62,7 @@ export default defineConfig({
       configureDiagramsPlugin(md, {
         diagramsDir: "docs/public/diagrams", // Optional: custom directory for SVG files
         publicPath: "/diagrams", // Optional: custom public path for images
+        krokiServerUrl: "https://kroki.io", // Optional: custom Kroki server URL
       });
     },
   },
@@ -102,7 +103,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | Option        | Type     | Default                  | Description                              |
 |---------------|----------|--------------------------|------------------------------------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Directory where SVG files will be stored |
-| `publicPath`  | `string` | `"/diagrams"`            | Public path for accessing the SVG files  |
+| `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
+| `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki server URL for diagram generation |
 
 ## Output
 
