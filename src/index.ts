@@ -80,7 +80,9 @@ export function diagramToSvg(
 
       fs.writeFileSync(filepath, placeholderSvg);
 
-      fetch(`https://kroki.io/${diagramType}`, {
+      const krokiServerUrl = diagramsPluginOptions.krokiServerUrl ?? "https://kroki.io";
+      
+      fetch(`${krokiServerUrl}/${diagramType}`, {
         method: "POST",
         headers: {
           Accept: "image/svg+xml",
