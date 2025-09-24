@@ -12,6 +12,8 @@
 2. Він не є 100% надійним (наприклад, сервіс kroki.io може бути недоступним).
 3. Користувач повинен перевірити вивід.
 
+> За допомогою `vitepress-plugin-diagrams` CLI, що постачається у комплекті з цим пакунком, можна перевірити наявність відсутніх або застарілих діаграм у CI. Також доступний гачок [pre-commit](https://pre-commit.com) (див. розділ [pre-commit](#pre-commit)).
+
 ## Можливості
 
 - Підтримка багатьох типів діаграм (Mermaid, PlantUML, GraphViz та інші)
@@ -97,8 +99,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 
 ## Конфігурація
 
-| Опція | Тип | За замовчуванням | Опис |
-|--------|------|---------|-------------|
+| Опція         | Тип      | За замовчуванням         | Опис                                 |
+|---------------|----------|--------------------------|--------------------------------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Директорія для зберігання SVG файлів |
 | `publicPath` | `string` | `"/diagrams"` | Публічний шлях для доступу до файлів |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | URL сервера Kroki для генерації діаграм |
@@ -119,6 +121,18 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Ви можете налаштувати класи `CSS` відповідно до вашої теми.
+
+## Pre-commit
+
+Додайте це до вашого `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/vuesence/vitepress-plugin-diagrams
+  rev: "main"
+  hooks:
+    - id: check-missing-diagrams
+    - id: clean-diagrams
+```
 
 ## Зауваження
 

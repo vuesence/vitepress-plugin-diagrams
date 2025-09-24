@@ -1,17 +1,19 @@
 {
-    "compilerOptions": {
-      "outDir": "dist",
-      "declaration": true,
-      "lib": [
-        "ES2021"
-      ],
-      "module": "ESNext",
-      "target": "ES2021",
-      "moduleResolution": "node",
-      "esModuleInterop": true,
-      "strict": true
-    },
-    "include": [
-      "index.ts"
-    ]
-  }
+  "compilerOptions": {
+    "outDir": "bin",
+    "declaration": true,
+    "lib": [
+      "es2022",
+      "dom"
+    ],
+    "module": "NodeNext",
+    "target": "es2022",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "strict": false,
+    "skipLibCheck": true
+  },
+  "include": [
+    "src/cli.ts"
+  ]
+}

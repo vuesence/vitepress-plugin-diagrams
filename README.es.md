@@ -12,6 +12,8 @@ Los diagramas están diseñados para ser generados en el tiempo __DEV__ debido a
 2. No es 100% confiable (por ejemplo, el servicio kroki.io podría estar caído).
 3. El usuario necesita verificar la salida.
 
+ > El CLI `vitepress-plugin-diagrams` que viene con este paquete puede ser usado en un CI para comprobar si faltan diagramas o si están desactualizados. También hay un hook [pre-commit](https://pre-commit.com) disponible (ver [sección pre-commit](#pre-commit-usage)).
+
 ## Características
 
 - Soporta múltiples tipos de diagramas (Mermaid, PlantUML, GraphViz y más)
@@ -97,10 +99,10 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 
 ## Configuración
 
-| Opción | Tipo | Valor predeterminado | Descripción |
-|--------|------|---------|-------------|
+| Opción        | Tipo     | Valor predeterminado     | Descripción                                      |
+|---------------|----------|--------------------------|--------------------------------------------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Directorio donde se almacenarán los archivos SVG |
-| `publicPath` | `string` | `"/diagrams"` | Ruta pública para acceder a los archivos |
+| `publicPath`  | `string` | `"/diagrams"`            | Ruta pública para acceder a los archivos         |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | URL del servidor Kroki para generar diagramas |
 
 ## Estructura de Salida
@@ -119,6 +121,18 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Puede personalizar las clases `CSS` para que coincidan con su tema.
+
+## Pre-commit
+
+Añade esto a tu `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/vuesence/vitepress-plugin-diagrams
+  rev: "main"
+  hooks:
+    - id: check-missing-diagrams
+    - id: clean-diagrams
+```
 
 ## Nota
 
