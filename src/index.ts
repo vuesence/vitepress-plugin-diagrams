@@ -26,6 +26,7 @@ export function diagramToSvg(
   caption?: string,
   diagramId?: string,
   diagramsPluginOptions: DiagramPluginOptions = {},
+  positionId?: string,
 ): string {
   try {
     // Normalize line endings to \n
@@ -44,11 +45,12 @@ export function diagramToSvg(
     // Ensure diagrams directory exists
     fs.mkdirSync(diagramsDir, { recursive: true });
 
-    // Generate unique filename
+    // Generate unique filename with position-based identifier
     const filename = generateUniqueFilename(
       diagramType as DiagramType,
       normalizedDiagram,
       diagramId,
+      positionId,
     );
     // console.log("filename", filename);
 
@@ -65,6 +67,16 @@ export function diagramToSvg(
     const shouldGenerateSvg = !fileExists || isPlaceholderSvg;
 
     if (shouldGenerateSvg) {
+      // Remove old diagram files before generating new ones
+      removeOldDiagramFiles(
+        diagramsDir,
+        diagramType as DiagramType,
+        diagramId,
+        filename,
+        normalizedDiagram,
+        positionId,
+      );
+
       // Create placeholder SVG while fetching the real one
       const placeholderSvg = `<?xml version="1.0" encoding="UTF-8"?>
 <svg width="100%" height="120" xmlns="http://www.w3.org/2000/svg">
@@ -92,15 +104,6 @@ export function diagramToSvg(
       })
         .then((res) => res.text())
         .then((svg) => {
-          // Remove old files with the same diagram ID
-          if (diagramId) {
-            removeOldDiagramFiles(
-              diagramsDir,
-              diagramType as DiagramType,
-              diagramId,
-              filename,
-            );
-          }
           fs.writeFileSync(filepath, svg);
           return svg;
         });
@@ -164,12 +167,18 @@ export function configureDiagramsPlugin(
     if (SUPPORTED_DIAGRAM_TYPES.includes(diagramType as DiagramType)) {
       const diagram = token.content.trim();
       const { caption, id } = extractDiagramMetadata(tokens, idx);
+      
+      // Generate position-based identifier for stable file association
+      const filePath = env?.path || 'unknown';
+      const positionId = `${path.basename(filePath, '.md')}-${idx}`;
+      
       return diagramToSvg(
         diagram,
         diagramType,
         caption,
         id,
         diagramsPluginOptions,
+        positionId,
       );
     }
 
@@ -178,5 +187,6 @@ export function configureDiagramsPlugin(
   };
 }
 
-export { SUPPORTED_DIAGRAM_TYPES } from "./constants.js";
-export type { DiagramMetadata, DiagramPluginOptions } from "./types.js";
+export { SUPPORTED_DIAGRAM_TYPES } from "./constants";
+export type { DiagramMetadata, DiagramPluginOptions } from "./types";
+export { generateUniqueFilename, removeOldDiagramFiles } from "./utils";
