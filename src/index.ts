@@ -164,7 +164,10 @@ export function configureDiagramsPlugin(
     const diagramType = token.info.trim().toLowerCase();
 
     // Check if the code block is a supported diagram type
-    if (SUPPORTED_DIAGRAM_TYPES.includes(diagramType as DiagramType)) {
+    const excluded = diagramsPluginOptions.excludedDiagramTypes ?? [];
+    const isSupported = SUPPORTED_DIAGRAM_TYPES.includes(diagramType as DiagramType);
+    const isExcluded = excluded.includes(diagramType as DiagramType);
+    if (isSupported && !isExcluded) {
       const diagram = token.content.trim();
       const { caption, id } = extractDiagramMetadata(tokens, idx);
       

@@ -63,6 +63,7 @@ export default defineConfig({
         diagramsDir: "docs/public/diagrams", // Optional: custom directory for SVG files
         publicPath: "/diagrams", // Optional: custom public path for images
         krokiServerUrl: "https://kroki.io", // Optional: custom Kroki server URL
+        excludedDiagramTypes: ["mermaid"], // Optional: exclude specific diagram types
       });
     },
   },
@@ -110,6 +111,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Directory where SVG files will be stored |
 | `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki server URL for diagram generation |
+| `excludedDiagramTypes` | `DiagramType[]` | `[]` | Diagram types to exclude; these code blocks render as normal code |
 
 ## Output
 
