@@ -1,6 +1,6 @@
 {
   "name": "vitepress-plugin-diagrams",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "VitePress plugin for generating diagrams from text (PlantUML, Mermaid, etc.)",
   "author": "Ruslan Makarov <ruslan.makarov@gmail.com>",
   "license": "MIT",
