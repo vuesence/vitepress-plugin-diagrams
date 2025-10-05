@@ -34,8 +34,7 @@
   ],
   "bin": "bin/cli.js",
   "scripts": {
-    "build": "vite build && pnpm build:cli",
-    "install": "pnpm build:cli",
+    "build": "vite build",
     "build:cli": "tsc",
     "publish": "pnpm publish --access public"
   },
