@@ -13,6 +13,8 @@ The diagrams are meant to be generated at __DEV time__ because:
 2. It’s not 100% reliable (e.g., kroki.io service might be down).
 3. The user needs to verify the output.
 
+> The `vitepress-plugin-diagrams` CLI that comes bundled with this package can be used in a CI to check for missing diagrams or outdated ones. There is also a [pre-commit](https://pre-commit.com) hook available (see [pre-commit section](#pre-commit)).
+
 ## Features
 
 - Supports multiple diagram types (Mermaid, PlantUML, GraphViz, and more)
@@ -98,8 +100,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 
 ## Configuration
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| Option        | Type     | Default                  | Description                              |
+|---------------|----------|--------------------------|------------------------------------------|
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Directory where SVG files will be stored |
 | `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki server URL for diagram generation |
@@ -126,6 +128,18 @@ You can customize the `CSS` classes to match your theme.
 ## Note
 
 When updating a diagram, you may see a placeholder image on the browser page. This is normal, because the svg file is loaded asynchronously and may not be displayed immediately. Just refresh the page.
+
+## Pre-commit
+
+Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/vuesence/vitepress-plugin-diagrams
+  rev: "main"
+  hooks:
+    - id: check-missing-diagrams
+    - id: clean-diagrams
+```
 
 ## License
 

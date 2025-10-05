@@ -1,14 +1,14 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
-import { SUPPORTED_DIAGRAM_TYPES, type DiagramType } from "./constants";
+import { SUPPORTED_DIAGRAM_TYPES, type DiagramType } from "./constants.js";
 
 import {
   extractDiagramMetadata,
   generateUniqueFilename,
   removeOldDiagramFiles,
   resolveDiagramBaseDir,
-} from "./utils";
-import type { DiagramPluginOptions } from "./types";
+} from "./utils.js";
+import type { DiagramPluginOptions } from "./types.js";
 import type { MarkdownRenderer } from "vitepress";
 
 /**
@@ -110,12 +110,12 @@ export function diagramToSvg(
 
     // src="${publicPath}/${filename}"
     // Return diagram with optional caption
-    return `<figure 
-      class="vpd-diagram vpd-diagram--${diagramType}" 
+    return `<figure
+      class="vpd-diagram vpd-diagram--${diagramType}"
       onclick="
         const figure = this;
         const isFullscreen = figure.classList.contains('vpd-diagram--fullscreen');
-        
+
         document.querySelectorAll('.vpd-diagram').forEach(diagram => {
           diagram.classList.remove('vpd-diagram--fullscreen');
         });
@@ -125,10 +125,10 @@ export function diagramToSvg(
         }
       "
     >
-        <img 
-          :src="\`${publicPath}/${filename}\`" 
-          alt="${diagramType} Diagram" 
-          class="vpd-diagram-image" 
+        <img
+          :src="\`${publicPath}/${filename}\`"
+          alt="${diagramType} Diagram"
+          class="vpd-diagram-image"
         />
       ${
         caption
@@ -178,5 +178,5 @@ export function configureDiagramsPlugin(
   };
 }
 
-export { SUPPORTED_DIAGRAM_TYPES } from "./constants";
-export type { DiagramMetadata, DiagramPluginOptions } from "./types";
+export { SUPPORTED_DIAGRAM_TYPES } from "./constants.js";
+export type { DiagramMetadata, DiagramPluginOptions } from "./types.js";

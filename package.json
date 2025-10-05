@@ -29,18 +29,27 @@
     "mermaid"
   ],
   "files": [
+    "bin",
     "dist"
   ],
+  "bin": "bin/cli.js",
   "scripts": {
-    "build": "vite build",
-    "prepare": "pnpm build",
+    "build": "vite build && pnpm build:cli",
+    "install": "pnpm build:cli",
+    "build:cli": "tsc",
     "publish": "pnpm publish --access public"
+  },
+  "dependencies": {
+    "markdown-it": "^14.1.0",
+    "commander": "^14.0.0"
   },
   "devDependencies": {
     "@sxzz/eslint-config": "^4.6.0",
     "@types/node": "^22.13.1",
+    "esbuild": "^0.25.5",
     "eslint": "^9.20.0",
     "typescript": "^5.7.3",
+    "undici-types": "^7.10.0",
     "vite": "^6.1.0",
     "vitepress": "^1.6.3"
   },
