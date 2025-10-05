@@ -7,6 +7,13 @@ settings:
 importers:
 
   .:
+    dependencies:
+      commander:
+        specifier: ^14.0.0
+        version: 14.0.0
+      markdown-it:
+        specifier: ^14.1.0
+        version: 14.1.0
     devDependencies:
       '@sxzz/eslint-config':
         specifier: ^4.6.0
@@ -14,18 +21,12 @@ importers:
       '@types/node':
         specifier: ^22.13.1
         version: 22.13.1
-      commander:
-        specifier: ^14.0.0
-        version: 14.0.0
       esbuild:
         specifier: ^0.25.5
         version: 0.25.5
       eslint:
         specifier: ^9.20.0
         version: 9.20.0(jiti@2.4.2)
-      markdown-it:
-        specifier: ^14.1.0
-        version: 14.1.0
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
