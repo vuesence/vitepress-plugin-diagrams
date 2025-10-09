@@ -91,6 +91,11 @@ graph TD
 - Уникальный ID каждой диаграммы предотвращает заполнение кэша старыми файлами (опционально, можно опустить, если вы не изменяете и не пересоздаете диаграммы)
 - Добавление пояснительных описаний под диаграммой (опционально) 
 
+Примечание об идентификаторах:
+
+- Если вы опустите `id`, плагин автоматически вычислит стабильный идентификатор на основе позиции (`positionId`) из имени markdown-файла и индекса блока кода. Это сохраняет стабильные имена файлов между пересборками, если диаграмма не перемещается внутри файла.
+- Если нельзя использовать ни `id`, ни позицию, имя файла будет иметь форму только с хэшем содержимого.
+
 ## Поддерживаемые диаграммы
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (с PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -108,7 +113,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -119,6 +124,17 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Вы можете настроить классы `CSS` в соответствии с вашей темой.
+
+### Шаблон имени файла и поведение кэша
+
+- Формат имени файла зависит от доступных идентификаторов:
+  - С явным `id`: `[diagramType]-[id]-[hash].svg`
+  - С идентификатором, основанным на позиции: `[diagramType]-[positionId]-[hash].svg`
+  - Без идентификатора: `[diagramType]-[hash].svg`
+- Старые файлы автоматически очищаются при регенерации:
+  - Для `id` удаляются предыдущие файлы с тем же `diagramType` и `id`.
+  - Для `positionId` удаляются предыдущие файлы с тем же `diagramType` и `positionId`.
+  - Без идентификаторов старые файлы вида `[diagramType]-[otherHash].svg` удаляются при изменении содержимого.
 
 ## Pre-commit
 
@@ -146,4 +162,4 @@ MIT
 
 ## Благодарности
 
-Этот плагин использует сервис [Kroki](https://kroki.io/) для генерации диаграмм. 
+Этот плагин использует сервис [Kroki](https://kroki.io/) для генерации диаграмм.

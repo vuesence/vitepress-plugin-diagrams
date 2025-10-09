@@ -91,6 +91,11 @@ graph TD
 - Призначення унікального ID кожній діаграмі для запобігання переповненню кешу (необов'язково, якщо ви не змінюєте та не regenerуєте діаграми)
 - Додавання пояснювальних описів під діаграмою (необов'язково)
 
+Примітка щодо ідентифікаторів:
+
+- Якщо ви опустите `id`, плагін автоматично визначає стабільний ідентифікатор на основі позиції (`positionId`) з назви markdown-файлу та індексу блоку коду. Це зберігає стабільність імен файлів між перебудовами, якщо діаграма не переміщується всередині файлу.
+- Якщо не можна використати ні `id`, ні позицію, ім'я файлу повертається до форми лише з хешем вмісту.
+
 ## Підтримувані діаграми
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (з PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -110,7 +115,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -121,6 +126,17 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Ви можете налаштувати класи `CSS` відповідно до вашої теми.
+
+### Шаблон імені файлу та поведінка кешу
+
+- Формат імені файлу залежить від доступних ідентифікаторів:
+  - З явним `id`: `[diagramType]-[id]-[hash].svg`
+  - З ідентифікатором на основі позиції: `[diagramType]-[positionId]-[hash].svg`
+  - Без ідентифікатора: `[diagramType]-[hash].svg`
+- Старі файли автоматично очищаються під час регенерації:
+  - Для `id` видаляються попередні файли з тим самим `diagramType` та `id`.
+  - Для `positionId` видаляються попередні файли з тим самим `diagramType` та `positionId`.
+  - Без ідентифікаторів старі файли виду `[diagramType]-[otherHash].svg` видаляються при зміні вмісту.
 
 ## Pre-commit
 
@@ -148,4 +164,4 @@ MIT
 
 ## Подяки
 
-Цей плагін використовує сервіс [Kroki](https://kroki.io/) для генерації діаграм. 
+Цей плагін використовує сервіс [Kroki](https://kroki.io/) для генерації діаграм.

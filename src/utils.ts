@@ -43,14 +43,19 @@ export function generateUniqueFilename(
   diagramType: DiagramType,
   diagramContent: string,
   diagramId?: string,
+  positionId?: string,
 ): string {
   // Create a hash of the diagram content to ensure unique filenames
   const hash = crypto.createHash("md5").update(diagramContent).digest("hex");
 
-  // Include diagram ID in filename if provided
-  return diagramId
-    ? `${diagramType}-${diagramId}-${hash}.svg`
-    : `${diagramType}-${hash}.svg`;
+  // Priority: diagramId > positionId > hash only
+  if (diagramId) {
+    return `${diagramType}-${diagramId}-${hash}.svg`;
+  } else if (positionId) {
+    return `${diagramType}-${positionId}-${hash}.svg`;
+  } else {
+    return `${diagramType}-${hash}.svg`;
+  }
 }
 
 /**
@@ -76,23 +81,70 @@ export function resolveDiagramBaseDir(customDir?: string): string {
 export function removeOldDiagramFiles(
   diagramsDir: string,
   diagramType: DiagramType,
-  diagramId: string,
+  diagramId: string | undefined,
   filename: string,
+  diagramContent?: string,
+  positionId?: string,
 ): void {
-  if (!diagramId) {
-    return;
+  try {
+    const allFiles = fs.readdirSync(diagramsDir);
+    let oldFiles: string[] = [];
+
+    if (diagramId) {
+      // If there is a diagramId, delete old files with the same ID
+      oldFiles = allFiles.filter(
+        (file) =>
+          file.startsWith(`${diagramType}-${diagramId}-`) && file !== filename,
+      );
+    } else if (positionId) {
+      // If there is a positionId, delete old files at the same position (different content hash)
+      oldFiles = allFiles.filter(
+        (file) =>
+          file.startsWith(`${diagramType}-${positionId}-`) && file !== filename,
+      );
+    } else if (diagramContent) {
+        // If there is no diagramId or positionId, delete old files based on content hash
+        const currentHash = crypto.createHash("md5").update(diagramContent).digest("hex");
+        const currentFilePattern = `${diagramType}-${currentHash}.svg`;
+        
+        // Delete files of the same type with different hashes (old versions with changed content)
+        // Filename format: diagramType-hash.svg (no ID or position ID)
+        oldFiles = allFiles.filter(
+          (file) => {
+            if (!file.startsWith(`${diagramType}-`) || !file.endsWith('.svg')) {
+              return false;
+            }
+            
+            // Exclude the current file
+            if (file === filename || file === currentFilePattern) {
+              return false;
+            }
+            
+            // Check whether it matches the format without ID and position ID: diagramType-hash.svg
+            const withoutExtension = file.slice(0, -4); // 移除 .svg
+            const parts = withoutExtension.split('-');
+            
+            // If it's in the diagramType-hash format (2 parts), then it's a file without an ID
+            if (parts.length === 2 && parts[0] === diagramType) {
+              return true;
+            }
+            
+            return false;
+          }
+        );
+      }
+
+    // Remove old files
+    oldFiles.forEach((oldFile) => {
+      const oldFilePath = path.join(diagramsDir, oldFile);
+      if (fs.existsSync(oldFilePath)) {
+        fs.unlinkSync(oldFilePath);
+        console.log(`Removed old diagram file: ${oldFile}`);
+      }
+    });
+  } catch (error) {
+    console.warn(`Failed to remove old diagram files: ${error}`);
   }
-
-  const oldFiles = fs
-    .readdirSync(diagramsDir)
-    .filter(
-      (file) =>
-        file.startsWith(`${diagramType}-${diagramId}-`) && file !== filename,
-    );
-
-  oldFiles.forEach((oldFile) => {
-    fs.unlinkSync(path.join(diagramsDir, oldFile));
-  });
 }
 
 /**

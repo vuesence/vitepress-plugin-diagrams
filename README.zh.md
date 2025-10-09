@@ -91,6 +91,11 @@ graph TD
 - 为每个图表分配唯一 ID 以防止缓存膨胀（可选，如果不修改和重新生成图表）
 - 在图表下添加描述性说明（可选）
 
+标识符说明：
+
+- 如果省略 `id`，插件会基于 Markdown 文件名和代码块索引自动推导出一个稳定的基于位置的标识符（`positionId`）。这会让文件名在重建间保持稳定，除非图表在文件中移动。
+- 如果既不能使用 `id` 也不能使用位置，文件名将回退为仅使用内容哈希的形式。
+
 ## 支持的图表类型
 
 Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag、NwDiag、PacketDiag、RackDiag、C4（使用 PlantUML）、D2、DBML、Ditaa、Erd、Excalidraw、Nomnoml、Pikchr、Structurizr、Svgbob、Symbolator、TikZ、UMlet、Vega、Vega-Lite、WaveDrom、WireViz
@@ -110,7 +115,7 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -121,6 +126,22 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 ```
 
 您可以自定义 `CSS` 类以匹配您的主题。
+
+## 文件名模式与缓存行为
+
+为确保稳定的文件命名和避免缓存污染，插件按以下优先级生成文件名：
+
+- 显式 `id`：`[diagramType]-[id]-[hash].svg`
+- 基于位置的 `positionId`：`[diagramType]-[positionId]-[hash].svg`
+- 无标识符：`[diagramType]-[hash].svg`
+
+缓存清理机制：
+
+- 当使用显式 `id` 时，插件会在内容变化时自动清理同一 `id` 的旧文件。
+- 当使用 `positionId` 时，插件会在内容变化时自动清理同一位置的旧文件（不同内容哈希）。
+- 当没有任何标识符时，插件会在内容变化时自动清理同类型且无标识符的旧文件（`[diagramType]-[hash].svg`）。
+
+这样可以使文件名在重建间保持可读与稳定，并在图表更新时保持输出目录整洁。
 
 ## 預提交部分
 
@@ -148,4 +169,4 @@ MIT
 
 ## 致谢
 
-本插件使用 [Kroki](https://kroki.io/) 服务生成图表。 
+本插件使用 [Kroki](https://kroki.io/) 服务生成图表。
