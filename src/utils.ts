@@ -91,40 +91,40 @@ export function removeOldDiagramFiles(
     let oldFiles: string[] = [];
 
     if (diagramId) {
-      // 如果有 diagramId，删除同 ID 的旧文件
+      // If there is a diagramId, delete old files with the same ID
       oldFiles = allFiles.filter(
         (file) =>
           file.startsWith(`${diagramType}-${diagramId}-`) && file !== filename,
       );
     } else if (positionId) {
-      // 如果有 positionId，删除同位置的旧文件（不同内容哈希）
+      // If there is a positionId, delete old files at the same position (different content hash)
       oldFiles = allFiles.filter(
         (file) =>
           file.startsWith(`${diagramType}-${positionId}-`) && file !== filename,
       );
     } else if (diagramContent) {
-        // 如果没有 diagramId 和 positionId，根据内容哈希删除旧文件
+        // If there is no diagramId or positionId, delete old files based on content hash
         const currentHash = crypto.createHash("md5").update(diagramContent).digest("hex");
         const currentFilePattern = `${diagramType}-${currentHash}.svg`;
         
-        // 删除同类型但不同哈希的文件（即内容已改变的旧版本）
-        // 文件名格式：diagramType-hash.svg（没有ID和位置ID）
+        // Delete files of the same type with different hashes (old versions with changed content)
+        // Filename format: diagramType-hash.svg (no ID or position ID)
         oldFiles = allFiles.filter(
           (file) => {
             if (!file.startsWith(`${diagramType}-`) || !file.endsWith('.svg')) {
               return false;
             }
             
-            // 排除当前文件
+            // Exclude the current file
             if (file === filename || file === currentFilePattern) {
               return false;
             }
             
-            // 检查是否是没有 ID 和位置 ID 的文件格式：diagramType-hash.svg
+            // Check whether it matches the format without ID and position ID: diagramType-hash.svg
             const withoutExtension = file.slice(0, -4); // 移除 .svg
             const parts = withoutExtension.split('-');
             
-            // 如果是 diagramType-hash 格式（2个部分），则是没有 ID 的文件
+            // If it's in the diagramType-hash format (2 parts), then it's a file without an ID
             if (parts.length === 2 && parts[0] === diagramType) {
               return true;
             }
@@ -134,7 +134,7 @@ export function removeOldDiagramFiles(
         );
       }
 
-    // 删除识别出的旧文件
+    // Remove old files
     oldFiles.forEach((oldFile) => {
       const oldFilePath = path.join(diagramsDir, oldFile);
       if (fs.existsSync(oldFilePath)) {
