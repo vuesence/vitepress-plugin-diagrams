@@ -1,3 +1,5 @@
+import { DiagramType } from "./constants";
+
 /**
  * Options for configuring the diagrams plugin
  */
@@ -19,6 +21,12 @@ export interface DiagramPluginOptions {
    * @default "https://kroki.io"
    */
   krokiServerUrl?: string;
+
+  /**
+   * Exclude specific diagram types from being processed
+   * If a code block's language matches any of these types, it will be rendered as a normal code block.
+   */
+  excludedDiagramTypes?: DiagramType[];
 }
 
 /**

@@ -62,6 +62,7 @@ export default defineConfig({
         diagramsDir: "docs/public/diagrams", // Опціонально: користувацька директорія для SVG файлів
         publicPath: "/diagrams", // Опціонально: користувацький публічний шлях для зображень
         krokiServerUrl: "https://kroki.io", // Опціонально: URL сервера Kroki
+        excludedDiagramTypes: ["mermaid"], // Опціонально: виключити певні типи діаграм
       });
     },
   },
@@ -109,6 +110,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | `diagramsDir` | `string` | `"docs/public/diagrams"` | Директорія для зберігання SVG файлів |
 | `publicPath` | `string` | `"/diagrams"` | Публічний шлях для доступу до файлів |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | URL сервера Kroki для генерації діаграм |
+| `excludedDiagramTypes` | `DiagramType[]` | `[]` | Типи діаграм для виключення; такі блоки відображаються як звичайний код |
 
 ## Структура виводу
 
