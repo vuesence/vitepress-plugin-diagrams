@@ -91,6 +91,11 @@ La función de metadatos de diagramas proporciona contexto e identificación adi
 - Asignar un ID único a cada diagrama para prevenir la saturación de caché (opcional, si no modifica y regenera diagramas)
 - Agregar descripciones explicativas debajo del diagrama (opcional)
 
+Nota sobre identificadores:
+
+- Si omite `id`, el plugin deriva automáticamente un identificador estable basado en la posición (`positionId`) a partir del nombre del archivo markdown y el índice del bloque de código. Esto mantiene estables los nombres de archivo entre reconstrucciones, a menos que el diagrama se mueva dentro del archivo.
+- Si no se puede usar ni `id` ni la posición, el nombre del archivo vuelve a una forma basada solo en el hash del contenido.
+
 ## Diagramas Soportados
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (con PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -110,7 +115,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -121,6 +126,17 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 Puede personalizar las clases `CSS` para que coincidan con su tema.
+
+### Patrón de nombre de archivo y comportamiento de caché
+
+- El formato del nombre de archivo varía según los identificadores disponibles:
+  - Con `id` explícito: `[diagramType]-[id]-[hash].svg`
+  - Con identificador basado en posición: `[diagramType]-[positionId]-[hash].svg`
+  - Sin identificador: `[diagramType]-[hash].svg`
+- Los archivos antiguos se limpian automáticamente al regenerar:
+  - Con `id`, se eliminan los archivos anteriores con el mismo `diagramType` y `id`.
+  - Con `positionId`, se eliminan los archivos anteriores con el mismo `diagramType` y `positionId`.
+  - Sin identificadores, los archivos `[diagramType]-[otherHash].svg` se eliminan cuando cambia el contenido.
 
 ## Pre-commit
 
@@ -148,4 +164,4 @@ MIT
 
 ## Créditos
 
-Este plugin utiliza el servicio [Kroki](https://kroki.io/) para la generación de diagramas. 
+Este plugin utiliza el servicio [Kroki](https://kroki.io/) para la generación de diagramas.

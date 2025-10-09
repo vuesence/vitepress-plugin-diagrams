@@ -92,6 +92,11 @@ The diagram metadata feature provides additional context and identification. You
 - Assign a unique ID to each diagram to prevent cache bloating (optional, if you do not modify and regenerate diagrams)
 - Add descriptive captions under the diagram (optional)
 
+Note on identifiers:
+
+- If you omit `id`, the plugin automatically derives a stable, position-based identifier (`positionId`) from the markdown file name and the code block index. This keeps filenames stable across rebuilds unless the diagram moves within the file.
+- If neither `id` nor position can be used, the filename falls back to a content hash-only form.
+
 ## Supported Diagrams
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (with PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -113,7 +118,7 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```html
 <figure class="vpd-diagram vpd-diagram--[diagramType]">
   <img 
-    src="[publicPath]/[diagramType]-[diagramId]-[hash].svg" 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
     alt="[diagramType] Diagram" 
     class="vpd-diagram-image"
   />
@@ -124,6 +129,17 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 ```
 
 You can customize the `CSS` classes to match your theme.
+
+### Filename pattern and cache behavior
+
+- Filename format varies based on available identifiers:
+  - With explicit `id`: `[diagramType]-[id]-[hash].svg`
+  - With position-based identifier: `[diagramType]-[positionId]-[hash].svg`
+  - Without any identifier: `[diagramType]-[hash].svg`
+- Old files are cleaned up automatically when regenerating:
+  - For `id`, previous files with the same `diagramType` and `id` are removed.
+  - For `positionId`, previous files with the same `diagramType` and `positionId` are removed.
+  - Without identifiers, older `[diagramType]-[otherHash].svg` files are removed when content changes.
 
 ## Note
 
