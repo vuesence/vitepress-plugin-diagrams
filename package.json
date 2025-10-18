@@ -15,6 +15,7 @@
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -34,7 +35,8 @@
   ],
   "bin": "bin/cli.js",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build && pnpm run build:types",
+    "build:types": "tsc -p tsconfig.types.json",
     "build:cli": "tsc",
     "publish": "pnpm publish --access public"
   },
