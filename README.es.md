@@ -22,6 +22,7 @@ Los diagramas están diseñados para ser generados en el tiempo __DEV__ debido a
 - Directorios de salida personalizables
 - Salida HTML limpia y semántica
 - Posibilidad de usar cualquier editor para crear diagramas (por ejemplo, VS Code con extensión Mermaid)
+- **Importar diagramas desde archivos externos** usando la sintaxis `@file:`
 
 ![Diagram](./diag-1.svg)
 
@@ -97,6 +98,59 @@ Nota sobre identificadores:
 - Si omite `id`, el plugin deriva automáticamente un identificador estable basado en la posición (`positionId`) a partir del nombre del archivo markdown y el índice del bloque de código. Esto mantiene estables los nombres de archivo entre reconstrucciones, a menos que el diagrama se mueva dentro del archivo.
 - Si no se puede usar ni `id` ni la posición, el nombre del archivo vuelve a una forma basada solo en el hash del contenido.
 
+## Importación de Archivos
+
+Puede importar definiciones de diagramas desde archivos externos usando la sintaxis `@file:`. Esto es útil para:
+
+- Gestionar diagramas complejos en editores dedicados (por ejemplo, editores BPMN, IDEs de PlantUML)
+- Reutilizar definiciones de diagramas en múltiples páginas de documentación
+- Mantener archivos markdown limpios y centrados en el contenido
+
+### Uso Básico
+
+````markdown
+```bpmn
+@file:./diagrams/process.bpmn
+```
+<!-- diagram id="1" caption: "Proceso de negocio" -->
+````
+
+La ruta se resuelve **relativa al archivo markdown** que contiene la importación.
+
+### Tipos de Ruta Soportados
+
+- **Rutas relativas**: `@file:./diagrams/test.bpmn` o `@file:../shared/test.mmd`
+- **Rutas absolutas**: `@file:/absolute/path/to/diagram.puml`
+
+### Opciones de Configuración
+
+Controle el comportamiento de importación de archivos con estas opciones del plugin:
+
+```ts
+configureDiagramsPlugin(md, {
+  // Habilitar/deshabilitar importación de archivos (predeterminado: true)
+  enableFileImports: true,
+  
+  // Restringir importaciones a directorios específicos por seguridad (opcional)
+  allowedImportDirs: [
+    './docs/diagrams',
+    './shared/diagrams'
+  ],
+});
+```
+
+### Seguridad
+
+Cuando se especifica `allowedImportDirs`, solo se pueden importar archivos dentro de esos directorios. Esto previene el acceso accidental o malicioso a archivos sensibles fuera de la estructura de documentación.
+
+### Manejo de Errores
+
+Si no se puede leer un archivo (faltante, permiso denegado, etc.), se mostrará un mensaje de error en lugar del diagrama:
+
+```
+Error loading diagram file: Failed to read file import: ENOENT: no such file or directory...
+```
+
 ## Diagramas Soportados
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (con PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -111,6 +165,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | `publicPath`  | `string` | `"/diagrams"`            | Ruta pública para acceder a los archivos         |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | URL del servidor Kroki para generar diagramas |
 | `excludedDiagramTypes` | `DiagramType[]` | `[]` | Tipos de diagramas a excluir; estos bloques se renderizan como código normal |
+| `enableFileImports` | `boolean` | `true` | Habilitar/deshabilitar sintaxis de importación de archivos (@file:) |
+| `allowedImportDirs` | `string[]` | `undefined` | Restringir importaciones de archivos a directorios específicos (seguridad) |
 
 ## Estructura de Salida
 

@@ -22,6 +22,7 @@
 - 可自定义输出路径
 - 清晰的语义化 HTML 输出
 - 可以使用任何编辑器创建图表（例如，使用 Mermaid 扩展的 VS Code）
+- **支持从外部文件导入图表**，使用 `@file:` 语法
 
 ![Diagram](./diag-1.svg)
 
@@ -97,6 +98,59 @@ graph TD
 - 如果省略 `id`，插件会基于 Markdown 文件名和代码块索引自动推导出一个稳定的基于位置的标识符（`positionId`）。这会让文件名在重建间保持稳定，除非图表在文件中移动。
 - 如果既不能使用 `id` 也不能使用位置，文件名将回退为仅使用内容哈希的形式。
 
+## 文件导入
+
+您可以使用 `@file:` 语法从外部文件导入图表定义。这对于以下场景非常有用：
+
+- 在专用编辑器中管理复杂图表（例如 BPMN 编辑器、PlantUML IDE）
+- 在多个文档页面之间复用图表定义
+- 保持 Markdown 文件简洁，专注于内容
+
+### 基本用法
+
+````markdown
+```bpmn
+@file:./diagrams/process.bpmn
+```
+<!-- diagram id="1" caption: "业务流程图" -->
+````
+
+路径是**相对于包含导入的 Markdown 文件**解析的。
+
+### 支持的路径类型
+
+- **相对路径**：`@file:./diagrams/test.bpmn` 或 `@file:../shared/test.mmd`
+- **绝对路径**：`@file:/absolute/path/to/diagram.puml`
+
+### 配置选项
+
+使用这些插件选项控制文件导入行为：
+
+```ts
+configureDiagramsPlugin(md, {
+  // 启用/禁用文件导入（默认：true）
+  enableFileImports: true,
+  
+  // 限制导入到特定目录以确保安全（可选）
+  allowedImportDirs: [
+    './docs/diagrams',
+    './shared/diagrams'
+  ],
+});
+```
+
+### 安全性
+
+指定 `allowedImportDirs` 后，只能导入这些目录内的文件。这可以防止意外或恶意访问文档结构之外的敏感文件。
+
+### 错误处理
+
+如果无法读取文件（文件缺失、权限被拒绝等），错误消息将显示在图表位置：
+
+```
+Error loading diagram file: Failed to read file import: ENOENT: no such file or directory...
+```
+
 ## 支持的图表类型
 
 Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag、NwDiag、PacketDiag、RackDiag、C4（使用 PlantUML）、D2、DBML、Ditaa、Erd、Excalidraw、Nomnoml、Pikchr、Structurizr、Svgbob、Symbolator、TikZ、UMlet、Vega、Vega-Lite、WaveDrom、WireViz
@@ -111,6 +165,8 @@ Mermaid、PlantUML、GraphViz、BlockDiag、BPMN、Bytefield、SeqDiag、ActDiag
 | `publicPath` | `string` | `"/diagrams"` | 文件访问的公共路径 |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki 服务器地址 |
 | `excludedDiagramTypes` | `DiagramType[]` | `[]` | 需要排除的图表类型；这些代码块将按普通代码块渲染 |
+| `enableFileImports` | `boolean` | `true` | 启用/禁用文件导入语法 (@file:) |
+| `allowedImportDirs` | `string[]` | `undefined` | 限制文件导入到特定目录（安全性） |
 
 ## 输出结构
 
