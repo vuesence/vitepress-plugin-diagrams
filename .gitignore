@@ -12,6 +12,8 @@ dist
 bin
 dist-ssr
 *.local
+demo/.vitepress/cache
+demo/public/diagrams
 
 # Editor directories and files
 .vscode/*

@@ -43,6 +43,16 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/debug@4.1.12)(@types/node@22.13.1)(jiti@2.4.2)(tsx@4.19.2)(yaml@2.7.0)
 
+  demo:
+    dependencies:
+      vitepress-plugin-diagrams:
+        specifier: workspace:*
+        version: link:..
+    devDependencies:
+      vitepress:
+        specifier: ^1.6.3
+        version: 1.6.3(@algolia/client-search@5.20.1)(@types/node@22.13.1)(postcss@8.5.2)(search-insights@2.17.3)(typescript@5.7.3)
+
 packages:
 
   '@algolia/autocomplete-core@1.17.7':

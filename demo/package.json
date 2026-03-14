@@ -1,0 +1,18 @@
+{
+  "name": "vitepress-diagrams-demo",
+  "version": "1.0.0",
+  "description": "Demo for vitepress-plugin-diagrams with @file: import feature",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev .",
+    "build": "vitepress build .",
+    "preview": "vitepress preview ."
+  },
+  "dependencies": {
+    "vitepress-plugin-diagrams": "link:.."
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}

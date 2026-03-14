@@ -1,0 +1,5 @@
+# GitHub Actions artifacts
+_dist/
+
+# Ignore workflow cache
+.cache/

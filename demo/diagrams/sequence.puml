@@ -1,0 +1,24 @@
+@startuml
+title User Authentication Sequence
+
+participant "User" as User
+participant "Frontend" as Frontend
+participant "API" as API
+participant "Database" as DB
+
+User -> Frontend: Enter credentials
+Frontend -> API: POST /auth/login
+API -> DB: Query user
+DB --> API: User data
+API -> API: Verify password
+
+alt Valid credentials
+    API -> API: Generate JWT token
+    API --> Frontend: Return token
+    Frontend --> User: Show dashboard
+else Invalid credentials
+    API --> Frontend: 401 Unauthorized
+    Frontend --> User: Show error
+end
+
+@enduml
