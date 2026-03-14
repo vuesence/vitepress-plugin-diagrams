@@ -23,7 +23,7 @@ cd demo
 pnpm dev
 ```
 
-Then open http://localhost:5173 in your browser.
+Then open `http://localhost:5173` in your browser.
 
 ### Build for Production
 
