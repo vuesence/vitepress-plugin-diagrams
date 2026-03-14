@@ -46,7 +46,7 @@ importers:
   demo:
     dependencies:
       vitepress-plugin-diagrams:
-        specifier: workspace:*
+        specifier: link:..
         version: link:..
     devDependencies:
       vitepress:
