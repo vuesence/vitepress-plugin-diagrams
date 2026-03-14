@@ -37,6 +37,8 @@ export function extractDiagramMetadata(
  * @param diagramType Type of diagram
  * @param diagramContent Diagram content
  * @param diagramId Optional diagram identifier
+ * @param positionId Optional position-based identifier
+ * @param sourceFileMtime Optional modification time of source file (for cache invalidation)
  * @returns Unique filename
  */
 export function generateUniqueFilename(
@@ -44,9 +46,14 @@ export function generateUniqueFilename(
   diagramContent: string,
   diagramId?: string,
   positionId?: string,
+  sourceFileMtime?: number,
 ): string {
-  // Create a hash of the diagram content to ensure unique filenames
-  const hash = crypto.createHash("md5").update(diagramContent).digest("hex");
+  // Create a hash of the diagram content and mtime to ensure unique filenames
+  // Including mtime ensures cache invalidation when source file changes
+  const hashInput = sourceFileMtime !== undefined 
+    ? `${diagramContent}${sourceFileMtime}` 
+    : diagramContent;
+  const hash = crypto.createHash("md5").update(hashInput).digest("hex");
 
   // Priority: diagramId > positionId > hash only
   if (diagramId) {
@@ -206,4 +213,151 @@ export function getAllDiagramsHashes(docsRoot?: string): Set<string> {
     }
   }
   return hashes;
+}
+
+/**
+ * List of dangerous file extensions that should be blocked for security
+ */
+const DANGEROUS_EXTENSIONS = [
+  '.exe', '.bat', '.cmd', '.sh', '.bash', '.ps1', '.vbs', '.js', '.ts',
+  '.php', '.py', '.rb', '.pl', '.com', '.msi', '.jar', '.pif', '.scr',
+  '.wsf', '.wsc', '.wsh', '.hta', '.cpl', '.inf', '.reg', '.lnk',
+];
+
+/**
+ * Check if a file extension is considered dangerous
+ * @param filePath File path to check
+ * @returns true if the file has a dangerous extension
+ */
+export function hasDangerousExtension(filePath: string): boolean {
+  const ext = path.extname(filePath).toLowerCase();
+  return DANGEROUS_EXTENSIONS.includes(ext);
+}
+
+/**
+ * Result of reading a file import, including content and metadata
+ */
+export interface FileImportResult {
+  content: string;
+  filePath: string;
+  mtime: number;
+}
+
+/**
+ * Check if content uses @file: syntax for importing diagram from file
+ * @param content Code block content
+ * @returns true if content starts with @file: syntax
+ */
+export function isFileImportSyntax(content: string): boolean {
+  const trimmed = content.trim();
+  return trimmed.startsWith('@file:');
+}
+
+/**
+ * Parse the file path from @file: syntax
+ * @param content Code block content
+ * @returns File path or null if not @file: syntax
+ */
+export function parseFileImportPath(content: string): string | null {
+  const trimmed = content.trim();
+  if (!trimmed.startsWith('@file:')) {
+    return null;
+  }
+  // Extract path after @file: and trim whitespace
+  // Only take the first line (path should be on the first line)
+  const firstLine = trimmed.split('\n')[0];
+  const importPath = firstLine.slice(6).trim();
+  return importPath || null;
+}
+
+/**
+ * Resolve file import path relative to the markdown file location
+ * @param importPath The path from @file: syntax
+ * @param markdownFilePath The path of the markdown file containing the import
+ * @returns Resolved absolute path
+ */
+export function resolveFileImportPath(importPath: string, markdownFilePath: string): string {
+  // If it's already an absolute path, return as-is
+  if (importPath.startsWith('/')) {
+    return importPath;
+  }
+
+  // Resolve relative to the markdown file's directory
+  const markdownDir = path.dirname(markdownFilePath);
+  return path.resolve(markdownDir, importPath);
+}
+
+/**
+ * Validate that a file path is within allowed directories (security check)
+ * Uses realpath to prevent symlink-based path traversal attacks
+ * @param filePath The resolved file path to validate
+ * @param allowedDirs Array of allowed base directories (empty means allow all)
+ * @returns true if path is safe
+ */
+export function validateFileImportPath(filePath: string, allowedDirs?: string[]): boolean {
+  // If no allowed dirs specified, allow all paths
+  if (!allowedDirs || allowedDirs.length === 0) {
+    return true;
+  }
+
+  try {
+    // Resolve to real path to prevent symlink attacks
+    const resolvedPath = fs.realpathSync(path.resolve(filePath));
+    
+    // Check if the file path is within any of the allowed directories
+    for (const allowedDir of allowedDirs) {
+      const resolvedAllowedDir = path.resolve(allowedDir);
+      const realAllowedDir = fs.realpathSync(resolvedAllowedDir);
+      
+      // Ensure the file path starts with the allowed directory path
+      if (resolvedPath.startsWith(realAllowedDir + path.sep) || resolvedPath === realAllowedDir) {
+        return true;
+      }
+    }
+  } catch (error) {
+    // If realpath fails (e.g., file doesn't exist), fall back to path.resolve
+    const resolvedPath = path.resolve(filePath);
+    for (const allowedDir of allowedDirs) {
+      const resolvedAllowedDir = path.resolve(allowedDir);
+      if (resolvedPath.startsWith(resolvedAllowedDir + path.sep) || resolvedPath === resolvedAllowedDir) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Read content from a file import with metadata for cache invalidation
+ * @param filePath Absolute path to the file
+ * @returns FileImportResult with content, path, and modification time
+ * @throws Error if file cannot be read or has dangerous extension
+ */
+export function readFileImport(filePath: string): FileImportResult {
+  try {
+    // Check for dangerous file extensions
+    if (hasDangerousExtension(filePath)) {
+      throw new Error(`File extension not allowed: ${path.extname(filePath)}`);
+    }
+
+    // Check if path exists and is a file
+    const stats = fs.statSync(filePath);
+    if (!stats.isFile()) {
+      throw new Error(`Path is not a file: ${filePath}`);
+    }
+
+    // Resolve to real path to prevent symlink attacks
+    const realPath = fs.realpathSync(filePath);
+    
+    const content = fs.readFileSync(realPath, 'utf-8');
+    return {
+      content,
+      filePath: realPath,
+      mtime: stats.mtimeMs,
+    };
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to read file import: ${errorMessage}`);
+  }
 }

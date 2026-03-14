@@ -27,6 +27,20 @@ export interface DiagramPluginOptions {
    * If a code block's language matches any of these types, it will be rendered as a normal code block.
    */
   excludedDiagramTypes?: DiagramType[];
+
+  /**
+   * Enable file import syntax (@file:path/to/file)
+   * When enabled, diagrams can be imported from external files
+   * @default true
+   */
+  enableFileImports?: boolean;
+
+  /**
+   * List of allowed base directories for file imports (security feature)
+   * If empty or undefined, all paths are allowed (relative to markdown file)
+   * @default undefined
+   */
+  allowedImportDirs?: string[];
 }
 
 /**

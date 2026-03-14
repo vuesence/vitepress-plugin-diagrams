@@ -7,6 +7,12 @@ import {
   generateUniqueFilename,
   removeOldDiagramFiles,
   resolveDiagramBaseDir,
+  isFileImportSyntax,
+  parseFileImportPath,
+  resolveFileImportPath,
+  validateFileImportPath,
+  readFileImport,
+  type FileImportResult,
 } from "./utils.js";
 import type { DiagramPluginOptions } from "./types.js";
 import type { MarkdownRenderer } from "vitepress";
@@ -18,6 +24,8 @@ import type { MarkdownRenderer } from "vitepress";
  * @param caption Optional diagram caption
  * @param diagramId Optional diagram identifier
  * @param diagramsPluginOptions Plugin configuration options
+ * @param positionId Optional position-based identifier
+ * @param sourceFileMtime Optional modification time of source file (for cache invalidation)
  * @returns HTML string with diagram and optional caption
  */
 export function diagramToSvg(
@@ -27,6 +35,7 @@ export function diagramToSvg(
   diagramId?: string,
   diagramsPluginOptions: DiagramPluginOptions = {},
   positionId?: string,
+  sourceFileMtime?: number,
 ): string {
   try {
     // Normalize line endings to \n
@@ -51,6 +60,7 @@ export function diagramToSvg(
       normalizedDiagram,
       diagramId,
       positionId,
+      sourceFileMtime,
     );
     // console.log("filename", filename);
 
@@ -168,13 +178,49 @@ export function configureDiagramsPlugin(
     const isSupported = SUPPORTED_DIAGRAM_TYPES.includes(diagramType as DiagramType);
     const isExcluded = excluded.includes(diagramType as DiagramType);
     if (isSupported && !isExcluded) {
-      const diagram = token.content.trim();
+      let diagram = token.content.trim();
       const { caption, id } = extractDiagramMetadata(tokens, idx);
+
+      // Handle file import syntax
+      const enableFileImports = diagramsPluginOptions.enableFileImports ?? true;
+      let sourceFileMtime: number | undefined;
       
+      if (enableFileImports && isFileImportSyntax(diagram)) {
+        try {
+          const importPath = parseFileImportPath(diagram);
+          if (importPath) {
+            // Get the markdown file path from env
+            const filePath = env?.path || '';
+            
+            if (!filePath) {
+              return `<div class="diagram-error">Cannot resolve file import: markdown file path is not available</div>`;
+            }
+
+            // Resolve the import path relative to the markdown file
+            const resolvedPath = resolveFileImportPath(importPath, filePath);
+
+            // Validate the path if allowed directories are specified
+            const allowedDirs = diagramsPluginOptions.allowedImportDirs;
+            if (!validateFileImportPath(resolvedPath, allowedDirs)) {
+              return `<div class="diagram-error">File import not allowed: ${importPath}. Path is outside allowed directories.</div>`;
+            }
+
+            // Read the file content with metadata for cache invalidation
+            const fileImportResult: FileImportResult = readFileImport(resolvedPath);
+            diagram = fileImportResult.content;
+            sourceFileMtime = fileImportResult.mtime;
+          }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : String(error);
+          const markdownPath = env?.path || 'unknown';
+          return `<div class="diagram-error">Error loading diagram file in ${markdownPath}: ${errorMessage}</div>`;
+        }
+      }
+
       // Generate position-based identifier for stable file association
       const filePath = env?.path || 'unknown';
       const positionId = `${path.basename(filePath, '.md')}-${idx}`;
-      
+
       return diagramToSvg(
         diagram,
         diagramType,
@@ -182,6 +228,7 @@ export function configureDiagramsPlugin(
         id,
         diagramsPluginOptions,
         positionId,
+        sourceFileMtime,
       );
     }
 
@@ -192,4 +239,14 @@ export function configureDiagramsPlugin(
 
 export { SUPPORTED_DIAGRAM_TYPES } from "./constants";
 export type { DiagramMetadata, DiagramPluginOptions } from "./types";
-export { generateUniqueFilename, removeOldDiagramFiles } from "./utils";
+export {
+  generateUniqueFilename,
+  removeOldDiagramFiles,
+  isFileImportSyntax,
+  parseFileImportPath,
+  resolveFileImportPath,
+  validateFileImportPath,
+  readFileImport,
+  hasDangerousExtension,
+  type FileImportResult,
+} from "./utils";

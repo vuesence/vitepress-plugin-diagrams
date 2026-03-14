@@ -1,0 +1,4 @@
+@startuml
+Alice -> Bob: Test
+Bob --> Alice: OK
+@enduml

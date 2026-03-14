@@ -23,6 +23,7 @@ The diagrams are meant to be generated at __DEV time__ because:
 - Customizable output directory and public path
 - Clean, semantic HTML output
 - Use can use any editor to create diagrams (for example `VS Code` with `Mermaid` extension)
+- **Import diagrams from external files** using `@file:` syntax
 
 ![Diagram](./diag-1.svg)
 
@@ -98,6 +99,59 @@ Note on identifiers:
 - If you omit `id`, the plugin automatically derives a stable, position-based identifier (`positionId`) from the markdown file name and the code block index. This keeps filenames stable across rebuilds unless the diagram moves within the file.
 - If neither `id` nor position can be used, the filename falls back to a content hash-only form.
 
+## File Imports
+
+You can import diagram definitions from external files using the `@file:` syntax. This is useful for:
+
+- Managing complex diagrams in dedicated editors (e.g., BPMN editors, PlantUML IDEs)
+- Reusing diagram definitions across multiple documentation pages
+- Keeping markdown files clean and focused on content
+
+### Basic Usage
+
+````markdown
+```bpmn
+@file:./diagrams/process.bpmn
+```
+<!-- diagram id="1" caption: "Business Process" -->
+````
+
+The path is resolved **relative to the markdown file** containing the import.
+
+### Supported Path Types
+
+- **Relative paths**: `@file:./diagrams/test.bpmn` or `@file:../shared/test.mmd`
+- **Absolute paths**: `@file:/absolute/path/to/diagram.puml`
+
+### Configuration Options
+
+Control file import behavior with these plugin options:
+
+```ts
+configureDiagramsPlugin(md, {
+  // Enable/disable file imports (default: true)
+  enableFileImports: true,
+  
+  // Restrict imports to specific directories for security (optional)
+  allowedImportDirs: [
+    './docs/diagrams',
+    './shared/diagrams'
+  ],
+});
+```
+
+### Security
+
+When `allowedImportDirs` is specified, only files within those directories can be imported. This prevents accidental or malicious access to sensitive files outside your documentation structure.
+
+### Error Handling
+
+If a file cannot be read (missing, permission denied, etc.), an error message will be displayed in place of the diagram:
+
+```
+Error loading diagram file: Failed to read file import: ENOENT: no such file or directory...
+```
+
 ## Supported Diagrams
 
 Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (with PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
@@ -112,6 +166,8 @@ Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDia
 | `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
 | `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki server URL for diagram generation |
 | `excludedDiagramTypes` | `DiagramType[]` | `[]` | Diagram types to exclude; these code blocks render as normal code |
+| `enableFileImports` | `boolean` | `true` | Enable/disable file import syntax (@file:) |
+| `allowedImportDirs` | `string[]` | `undefined` | Restrict file imports to specific directories (security) |
 
 ## Output
 
