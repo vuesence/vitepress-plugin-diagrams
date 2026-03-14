@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress';
 import { configureDiagramsPlugin } from 'vitepress-plugin-diagrams';
 
-const base = process.env.GITHUB_ACTIONS ? '/vitepress-plugin-diagrams/' : '/';
+const base = process.env.GITHUB_ACTIONS ? '/vitepress-plugin-diagrams/demo/' : '/';
 
 export default defineConfig({
   base,
