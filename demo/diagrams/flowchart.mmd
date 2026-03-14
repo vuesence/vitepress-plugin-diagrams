@@ -1,0 +1,13 @@
+graph TD
+    A[User Visits Website] --> B{Is Logged In?}
+    B -->|Yes| C[Show Dashboard]
+    B -->|No| D[Show Login Page]
+    D --> E[User Enters Credentials]
+    E --> F{Valid Credentials?}
+    F -->|Yes| C
+    F -->|No| G[Show Error Message]
+    G --> D
+    C --> H[User Performs Action]
+    H --> I[Update Database]
+    I --> J[Show Confirmation]
+    J --> K[End]

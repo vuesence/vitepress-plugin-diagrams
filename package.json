@@ -40,6 +40,8 @@
     "build:cli": "tsc",
     "test": "vitest",
     "test:run": "vitest run",
+    "demo:dev": "pnpm --filter vitepress-diagrams-demo dev",
+    "demo:build": "pnpm --filter vitepress-diagrams-demo build",
     "publish": "pnpm publish --access public"
   },
   "dependencies": {
