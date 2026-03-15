@@ -25,6 +25,10 @@ The diagrams are meant to be generated at __DEV time__ because:
 - Use can use any editor to create diagrams (for example `VS Code` with `Mermaid` extension)
 - **Import diagrams from external files** using `@file:` syntax
 
+## Demo
+
+Check out the [live demo](https://vuesence.github.io/vitepress-plugin-diagrams/demo/) to see the plugin in action.
+
 ![Diagram](./diag-1.svg)
 
 ## Installation

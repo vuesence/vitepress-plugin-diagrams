@@ -24,6 +24,10 @@
 - 可以使用任何编辑器创建图表（例如，使用 Mermaid 扩展的 VS Code）
 - **支持从外部文件导入图表**，使用 `@file:` 语法
 
+## Demo
+
+查看 [在线演示](https://vuesence.github.io/vitepress-plugin-diagrams/demo/) 以了解插件的实际效果。
+
 ![Diagram](./diag-1.svg)
 
 ## 安装

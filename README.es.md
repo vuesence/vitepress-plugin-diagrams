@@ -24,6 +24,10 @@ Los diagramas están diseñados para ser generados en el tiempo __DEV__ debido a
 - Posibilidad de usar cualquier editor para crear diagramas (por ejemplo, VS Code con extensión Mermaid)
 - **Importar diagramas desde archivos externos** usando la sintaxis `@file:`
 
+## Demo
+
+Consulta la [demo en vivo](https://vuesence.github.io/vitepress-plugin-diagrams/demo/) para ver el plugin en acción.
+
 ![Diagram](./diag-1.svg)
 
 ## Instalación
