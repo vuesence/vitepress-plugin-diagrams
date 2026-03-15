@@ -2,17 +2,18 @@ import { defineConfig } from 'vitepress';
 import { configureDiagramsPlugin } from 'vitepress-plugin-diagrams';
 
 const base = process.env.GITHUB_ACTIONS ? '/vitepress-plugin-diagrams/demo/' : '/';
+const publicPath = process.env.GITHUB_ACTIONS ? '/vitepress-plugin-diagrams/demo/diagrams' : '/diagrams';
 
 export default defineConfig({
   base,
   title: 'VitePress Diagrams Demo',
   description: 'Testing @file: import feature',
-  
+
   markdown: {
     config: (md) => {
       configureDiagramsPlugin(md, {
         diagramsDir: 'public/diagrams',
-        publicPath: '/diagrams',
+        publicPath,
         krokiServerUrl: 'https://kroki.io',
         enableFileImports: true,
         // Uncomment to restrict file imports to specific directories:
