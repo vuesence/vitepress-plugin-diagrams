@@ -1,0 +1,42 @@
+import{_ as r,c as l,o as n,ae as i,j as a,a as s}from"./chunks/framework.CkhtPnaB.js";const u=JSON.parse('{"title":"File Imports","description":"","frontmatter":{},"headers":[],"relativePath":"file-imports.md","filePath":"file-imports.md"}'),t={name:"file-imports.md"};function o(d,e,c,p,m,h){return n(),l("div",null,e[0]||(e[0]=[i('<h1 id="file-imports" tabindex="-1">File Imports <a class="header-anchor" href="#file-imports" aria-label="Permalink to &quot;File Imports&quot;">​</a></h1><p>This page demonstrates the new <strong><code>@file:</code> syntax</strong> for importing diagrams from external files.</p><h2 id="basic-usage" tabindex="-1">Basic Usage <a class="header-anchor" href="#basic-usage" aria-label="Permalink to &quot;Basic Usage&quot;">​</a></h2><p>Instead of writing diagram code inline, you can reference an external file:</p><div class="language-markdown vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">markdown</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">```bpmn</span></span>\n<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">@file:./diagrams/process.bpmn</span></span>\n<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">```</span></span></code></pre></div><h2 id="examples" tabindex="-1">Examples <a class="header-anchor" href="#examples" aria-label="Permalink to &quot;Examples&quot;">​</a></h2><h3 id="bpmn-from-file" tabindex="-1">BPMN from File <a class="header-anchor" href="#bpmn-from-file" aria-label="Permalink to &quot;BPMN from File&quot;">​</a></h3>',7),a("figure",{class:"vpd-diagram vpd-diagram--bpmn",onclick:`
+        const figure = this;
+        const isFullscreen = figure.classList.contains('vpd-diagram--fullscreen');
+
+        document.querySelectorAll('.vpd-diagram').forEach(diagram => {
+          diagram.classList.remove('vpd-diagram--fullscreen');
+        });
+
+        if (!isFullscreen) {
+          figure.classList.add('vpd-diagram--fullscreen');
+        }
+      `},[a("img",{src:"/vitepress-plugin-diagrams/demo/diagrams/bpmn-file-bpmn-1-c327ea771c28171d32a5c9278bba92de.svg",alt:"bpmn Diagram",class:"vpd-diagram-image"})],-1),a("h3",{id:"mermaid-from-file",tabindex:"-1"},[s("Mermaid from File "),a("a",{class:"header-anchor",href:"#mermaid-from-file","aria-label":'Permalink to "Mermaid from File"'},"​")],-1),a("figure",{class:"vpd-diagram vpd-diagram--mermaid",onclick:`
+        const figure = this;
+        const isFullscreen = figure.classList.contains('vpd-diagram--fullscreen');
+
+        document.querySelectorAll('.vpd-diagram').forEach(diagram => {
+          diagram.classList.remove('vpd-diagram--fullscreen');
+        });
+
+        if (!isFullscreen) {
+          figure.classList.add('vpd-diagram--fullscreen');
+        }
+      `},[a("img",{src:"/vitepress-plugin-diagrams/demo/diagrams/mermaid-file-mermaid-1-1cfe2b892f91b4a133700765e2059aff.svg",alt:"mermaid Diagram",class:"vpd-diagram-image"})],-1),a("h3",{id:"plantuml-from-file",tabindex:"-1"},[s("PlantUML from File "),a("a",{class:"header-anchor",href:"#plantuml-from-file","aria-label":'Permalink to "PlantUML from File"'},"​")],-1),a("figure",{class:"vpd-diagram vpd-diagram--plantuml",onclick:`
+        const figure = this;
+        const isFullscreen = figure.classList.contains('vpd-diagram--fullscreen');
+
+        document.querySelectorAll('.vpd-diagram').forEach(diagram => {
+          diagram.classList.remove('vpd-diagram--fullscreen');
+        });
+
+        if (!isFullscreen) {
+          figure.classList.add('vpd-diagram--fullscreen');
+        }
+      `},[a("img",{src:"/vitepress-plugin-diagrams/demo/diagrams/plantuml-file-plantuml-1-a1ef0a665a113d8c8dd4ab665a0aca94.svg",alt:"plantuml Diagram",class:"vpd-diagram-image"})],-1),i(`<h2 id="configuration" tabindex="-1">Configuration <a class="header-anchor" href="#configuration" aria-label="Permalink to &quot;Configuration&quot;">​</a></h2><h3 id="enable-disable-file-imports" tabindex="-1">Enable/Disable File Imports <a class="header-anchor" href="#enable-disable-file-imports" aria-label="Permalink to &quot;Enable/Disable File Imports&quot;">​</a></h3><div class="language-ts vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">ts</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">configureDiagramsPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(md, {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  enableFileImports: </span><span style="--shiki-light:#005CC5;--shiki-dark:#79B8FF;">true</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">, </span><span style="--shiki-light:#6A737D;--shiki-dark:#6A737D;">// default: true</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">});</span></span></code></pre></div><h3 id="restrict-allowed-directories" tabindex="-1">Restrict Allowed Directories <a class="header-anchor" href="#restrict-allowed-directories" aria-label="Permalink to &quot;Restrict Allowed Directories&quot;">​</a></h3><p>For security, you can restrict which directories files can be imported from:</p><div class="language-ts vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">ts</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-dark:#B392F0;">configureDiagramsPlugin</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">(md, {</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  allowedImportDirs: [</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">    &#39;./docs/diagrams&#39;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span class="line"><span style="--shiki-light:#032F62;--shiki-dark:#9ECBFF;">    &#39;./shared/diagrams&#39;</span><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">,</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">  ],</span></span>
+<span class="line"><span style="--shiki-light:#24292E;--shiki-dark:#E1E4E8;">});</span></span></code></pre></div><p>This prevents importing files from outside the specified directories.</p><h2 id="path-resolution" tabindex="-1">Path Resolution <a class="header-anchor" href="#path-resolution" aria-label="Permalink to &quot;Path Resolution&quot;">​</a></h2><p>Paths are resolved <strong>relative to the markdown file</strong> containing the import:</p><ul><li><code>@file:./diagrams/test.bpmn</code> - Relative to current file</li><li><code>@file:../shared/test.mmd</code> - Parent directory</li><li><code>@file:/absolute/path/test.puml</code> - Absolute path</li></ul><h2 id="error-handling" tabindex="-1">Error Handling <a class="header-anchor" href="#error-handling" aria-label="Permalink to &quot;Error Handling&quot;">​</a></h2><p>If a file cannot be read, you&#39;ll see an error message:</p><div class="language- vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang"></span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>Error loading diagram file in docs/file-imports.md: </span></span>
+<span class="line"><span>Failed to read file import: ENOENT: no such file or directory...</span></span></code></pre></div><h2 id="security-features" tabindex="-1">Security Features <a class="header-anchor" href="#security-features" aria-label="Permalink to &quot;Security Features&quot;">​</a></h2><p>The plugin includes several security features:</p><ol><li><strong>Dangerous Extension Blocking</strong> - Blocks <code>.exe</code>, <code>.sh</code>, <code>.bat</code>, <code>.php</code>, etc.</li><li><strong>Symlink Protection</strong> - Uses <code>realpath</code> to prevent symlink attacks</li><li><strong>Directory Restrictions</strong> - Optional <code>allowedImportDirs</code> for access control</li></ol><hr><p><strong>Previous:</strong> <a href="/vitepress-plugin-diagrams/demo/inline-diagrams.html">Inline Diagrams</a> - See traditional inline diagram examples</p>`,18)]))}const f=r(t,[["render",o]]);export{u as __pageData,f as default};

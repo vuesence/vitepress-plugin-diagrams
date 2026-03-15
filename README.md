@@ -1,0 +1,228 @@
+# VitePress Diagrams Plugin
+
+[English](README.md) | [Español](README.es.md) | [中文](README.zh.md) | [Українська](README.uk.md) | [Русский](README.ru.md)
+
+A VitePress plugin that adds support for various diagram types using the Kroki service. The plugin automatically converts diagram code blocks into SVG images, caches them locally, and provides a clean, customizable display with optional captions.
+
+
+Using an external service requires an internet connection during build, but it offers significant advantages over creating an image on the client (huge bundle and performance drop) and over creating an image on the server (complexity - mermaid requires puppeteer for this, for example).
+
+The diagrams are meant to be generated at __DEV time__ because:
+
+1. The generation process is asynchronous.
+2. It’s not 100% reliable (e.g., kroki.io service might be down).
+3. The user needs to verify the output.
+
+> The `vitepress-plugin-diagrams` CLI that comes bundled with this package can be used in a CI to check for missing diagrams or outdated ones. There is also a [pre-commit](https://pre-commit.com) hook available (see [pre-commit section](#pre-commit)).
+
+## Features
+
+- Supports multiple diagram types (Mermaid, PlantUML, GraphViz, and more)
+- Automatic SVG generation and caching (once generated it's cached locally until the diagram code changes)
+- Optional diagram captions
+- Customizable output directory and public path
+- Clean, semantic HTML output
+- Use can use any editor to create diagrams (for example `VS Code` with `Mermaid` extension)
+- **Import diagrams from external files** using `@file:` syntax
+
+![Diagram](./diag-1.svg)
+
+## Installation
+
+```bash
+pnpm add -D vitepress-plugin-diagrams
+```
+
+<details>
+<summary>yarn</summary>
+
+```bash
+yarn add -D vitepress-plugin-diagrams
+```
+</details>
+
+<details>
+<summary>npm</summary>
+
+```bash
+npm install --save-dev vitepress-plugin-diagrams
+```
+</details>
+
+## Quick Start
+
+1. Add to VitePress config (`.vitepress/config.ts`):
+
+```ts
+import { defineConfig } from "vitepress";
+import { configureDiagramsPlugin } from "vitepress-plugin-diagrams";
+
+export default defineConfig({
+  markdown: {
+    config: (md) => {
+      configureDiagramsPlugin(md, {
+        diagramsDir: "docs/public/diagrams", // Optional: custom directory for SVG files
+        publicPath: "/diagrams", // Optional: custom public path for images
+        krokiServerUrl: "https://kroki.io", // Optional: custom Kroki server URL
+        excludedDiagramTypes: ["mermaid"], // Optional: exclude specific diagram types
+      });
+    },
+  },
+});
+```
+
+2. Create diagrams in markdown:
+
+````
+```mermaid
+graph TD
+    A[Start] --> B{Decision}
+    B -->|Yes| C[OK]
+    B -->|No| D[Cancel]
+```
+<!-- diagram id="1" caption: "System Design Flow" -->
+````
+
+## Diagram Metadata
+
+The diagram metadata feature provides additional context and identification. You can add metadata to your diagrams using special HTML comments.
+
+```html
+<!-- diagram id="1" caption: "System Design Flow" -->
+```
+
+- Assign a unique ID to each diagram to prevent cache bloating (optional, if you do not modify and regenerate diagrams)
+- Add descriptive captions under the diagram (optional)
+
+Note on identifiers:
+
+- If you omit `id`, the plugin automatically derives a stable, position-based identifier (`positionId`) from the markdown file name and the code block index. This keeps filenames stable across rebuilds unless the diagram moves within the file.
+- If neither `id` nor position can be used, the filename falls back to a content hash-only form.
+
+## File Imports
+
+You can import diagram definitions from external files using the `@file:` syntax. This is useful for:
+
+- Managing complex diagrams in dedicated editors (e.g., BPMN editors, PlantUML IDEs)
+- Reusing diagram definitions across multiple documentation pages
+- Keeping markdown files clean and focused on content
+
+### Basic Usage
+
+````markdown
+```bpmn
+@file:./diagrams/process.bpmn
+```
+<!-- diagram id="1" caption: "Business Process" -->
+````
+
+The path is resolved **relative to the markdown file** containing the import.
+
+### Supported Path Types
+
+- **Relative paths**: `@file:./diagrams/test.bpmn` or `@file:../shared/test.mmd`
+- **Absolute paths**: `@file:/absolute/path/to/diagram.puml`
+
+### Configuration Options
+
+Control file import behavior with these plugin options:
+
+```ts
+configureDiagramsPlugin(md, {
+  // Enable/disable file imports (default: true)
+  enableFileImports: true,
+  
+  // Restrict imports to specific directories for security (optional)
+  allowedImportDirs: [
+    './docs/diagrams',
+    './shared/diagrams'
+  ],
+});
+```
+
+### Security
+
+When `allowedImportDirs` is specified, only files within those directories can be imported. This prevents accidental or malicious access to sensitive files outside your documentation structure.
+
+### Error Handling
+
+If a file cannot be read (missing, permission denied, etc.), an error message will be displayed in place of the diagram:
+
+```
+Error loading diagram file: Failed to read file import: ENOENT: no such file or directory...
+```
+
+## Supported Diagrams
+
+Mermaid, PlantUML, GraphViz, BlockDiag, BPMN, Bytefield, SeqDiag, ActDiag, NwDiag, PacketDiag, RackDiag, C4 (with PlantUML), D2, DBML, Ditaa, Erd, Excalidraw, Nomnoml, Pikchr, Structurizr, Svgbob, Symbolator, TikZ, UMlet, Vega, Vega-Lite, WaveDrom, WireViz
+
+[View full list of supported diagrams →](https://kroki.io/#support)
+
+## Configuration
+
+| Option        | Type     | Default                  | Description                              |
+|---------------|----------|--------------------------|------------------------------------------|
+| `diagramsDir` | `string` | `"docs/public/diagrams"` | Directory where SVG files will be stored |
+| `publicPath` | `string` | `"/diagrams"` | Public path for accessing the SVG files |
+| `krokiServerUrl` | `string` | `"https://kroki.io"` | Kroki server URL for diagram generation |
+| `excludedDiagramTypes` | `DiagramType[]` | `[]` | Diagram types to exclude; these code blocks render as normal code |
+| `enableFileImports` | `boolean` | `true` | Enable/disable file import syntax (@file:) |
+| `allowedImportDirs` | `string[]` | `undefined` | Restrict file imports to specific directories (security) |
+
+## Output
+
+## Output Structure
+
+```html
+<figure class="vpd-diagram vpd-diagram--[diagramType]">
+  <img 
+    src="[publicPath]/[diagramType]-[identifier]-[hash].svg" 
+    alt="[diagramType] Diagram" 
+    class="vpd-diagram-image"
+  />
+  <figcaption class="vpd-diagram-caption">
+    [caption]
+  </figcaption>
+</figure>
+```
+
+You can customize the `CSS` classes to match your theme.
+
+### Filename pattern and cache behavior
+
+- Filename format varies based on available identifiers:
+  - With explicit `id`: `[diagramType]-[id]-[hash].svg`
+  - With position-based identifier: `[diagramType]-[positionId]-[hash].svg`
+  - Without any identifier: `[diagramType]-[hash].svg`
+- Old files are cleaned up automatically when regenerating:
+  - For `id`, previous files with the same `diagramType` and `id` are removed.
+  - For `positionId`, previous files with the same `diagramType` and `positionId` are removed.
+  - Without identifiers, older `[diagramType]-[otherHash].svg` files are removed when content changes.
+
+## Note
+
+When updating a diagram, you may see a placeholder image on the browser page. This is normal, because the svg file is loaded asynchronously and may not be displayed immediately. Just refresh the page.
+
+## Pre-commit
+
+Add this to your `.pre-commit-config.yaml`:
+
+```yaml
+- repo: https://github.com/vuesence/vitepress-plugin-diagrams
+  rev: "main"
+  hooks:
+    - id: check-missing-diagrams
+    - id: clean-diagrams
+```
+
+## License
+
+MIT
+
+## Contributing
+
+Contributions are welcome! Before submitting a Pull Request, please open an issue first to discuss proposed changes.
+
+## Credits
+
+This plugin uses the [Kroki](https://kroki.io/) service for diagram generation.
