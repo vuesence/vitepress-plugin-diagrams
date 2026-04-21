@@ -44,6 +44,33 @@ export interface DiagramPluginOptions {
 }
 
 /**
+ * Options for build-time diagram generation.
+ * Extends the standard plugin options with build-specific settings.
+ * Used with `createBuildTimeDiagramsPlugin()`.
+ */
+export interface BuildTimeDiagramPluginOptions extends DiagramPluginOptions {
+  /**
+   * Directory name where SVG files are emitted in the build output.
+   * This is relative to the Vite/Rollup output directory.
+   * @example "diagrams"
+   */
+  diagramsDistDir?: string;
+}
+
+/**
+ * A deferred diagram generation call, used internally by the build-time plugin.
+ * @internal
+ */
+export interface DeferredDiagramCall {
+  filepath: string;
+  getDiagram: () => Promise<void | {
+    type: 'asset';
+    fileName: string;
+    source: string;
+  }>;
+}
+
+/**
  * Extracted diagram metadata from markdown tokens
  */
 export interface DiagramMetadata {

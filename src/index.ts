@@ -238,7 +238,7 @@ export function configureDiagramsPlugin(
 }
 
 export { SUPPORTED_DIAGRAM_TYPES } from "./constants";
-export type { DiagramMetadata, DiagramPluginOptions } from "./types";
+export type { DiagramMetadata, DiagramPluginOptions, BuildTimeDiagramPluginOptions } from "./types";
 export {
   generateUniqueFilename,
   removeOldDiagramFiles,
@@ -250,3 +250,4 @@ export {
   hasDangerousExtension,
   type FileImportResult,
 } from "./utils";
+export { createBuildTimeDiagramsPlugin } from "./build-time";

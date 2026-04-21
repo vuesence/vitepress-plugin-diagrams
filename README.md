@@ -24,6 +24,7 @@ The diagrams are meant to be generated at __DEV time__ because:
 - Clean, semantic HTML output
 - Use can use any editor to create diagrams (for example `VS Code` with `Mermaid` extension)
 - **Import diagrams from external files** using `@file:` syntax
+- **Optional build-time generation** for CI/CD pipelines (diagrams generated during `vitepress build`)
 
 ## Demo
 
@@ -202,6 +203,58 @@ You can customize the `CSS` classes to match your theme.
   - For `id`, previous files with the same `diagramType` and `id` are removed.
   - For `positionId`, previous files with the same `diagramType` and `positionId` are removed.
   - Without identifiers, older `[diagramType]-[otherHash].svg` files are removed when content changes.
+
+## Build-Time Generation (Optional)
+
+By default, diagrams are generated at **dev time** (fire-and-forget fetch with a placeholder SVG). For CI/CD pipelines or when you need diagrams to be reliably generated during `vitepress build`, you can use the **build-time generation** mode.
+
+In this mode:
+- Diagram HTTP calls are **deferred** and executed during the Vite build (`generateBundle` hook) or dev server request.
+- The build **fails** if a diagram cannot be generated (e.g., Kroki is unreachable), ensuring broken diagrams are caught early.
+- Already-generated SVGs on disk are reused (not re-fetched).
+
+### Setup
+
+Use `createBuildTimeDiagramsPlugin` instead of `configureDiagramsPlugin`:
+
+```ts
+import { defineConfig } from "vitepress";
+import { createBuildTimeDiagramsPlugin } from "vitepress-plugin-diagrams";
+
+const { configureMarkdown, vitePlugin } = createBuildTimeDiagramsPlugin({
+  diagramsDir: "docs/public/diagrams",
+  publicPath: "/diagrams",
+  // Optional: emit SVGs as build assets at this path
+  diagramsDistDir: "diagrams",
+});
+
+export default defineConfig({
+  markdown: {
+    config: (md) => configureMarkdown(md),
+  },
+  vite: {
+    plugins: [vitePlugin()],
+  },
+});
+```
+
+All standard options (`krokiServerUrl`, `excludedDiagramTypes`, `enableFileImports`, etc.) are supported.
+
+| Additional Option | Type | Default | Description |
+|-------------------|------|---------|-------------|
+| `diagramsDistDir` | `string` | `undefined` | If set, SVG files are emitted as Vite build assets at this path |
+
+### Using with a self-hosted Kroki instance
+
+For reliable CI builds, you can run [Kroki via Docker](https://docs.kroki.io/kroki/setup/use-docker-or-podman/) and point the plugin to it:
+
+```ts
+const { configureMarkdown, vitePlugin } = createBuildTimeDiagramsPlugin({
+  krokiServerUrl: "http://localhost:8000",
+  diagramsDir: "docs/public/diagrams",
+  publicPath: "/diagrams",
+});
+```
 
 ## Note
 
