@@ -1,17 +1,17 @@
 {
   "name": "vitepress-plugin-diagrams",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "VitePress plugin for generating diagrams from text (PlantUML, Mermaid, etc.)",
   "author": "Ruslan Makarov <ruslan.makarov@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/altrusl/vitepress-plugin-diagrams.git"
+    "url": "git+https://github.com/vuesence/vitepress-plugin-diagrams.git"
   },
   "bugs": {
-    "url": "https://github.com/altrusl/vitepress-plugin-diagrams/issues"
+    "url": "https://github.com/vuesence/vitepress-plugin-diagrams/issues"
   },
-  "homepage": "https://github.com/altrusl/vitepress-plugin-diagrams",
+  "homepage": "https://github.com/vuesence/vitepress-plugin-diagrams",
   "type": "module",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -42,6 +42,7 @@
     "test:run": "vitest run",
     "demo:dev": "pnpm --filter vitepress-diagrams-demo dev",
     "demo:build": "pnpm --filter vitepress-diagrams-demo build",
+    "prepublishOnly": "rm -rf dist && pnpm run build",
     "publish": "pnpm publish --access public"
   },
   "dependencies": {
